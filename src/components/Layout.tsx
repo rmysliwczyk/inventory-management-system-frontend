@@ -10,11 +10,12 @@ import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 
-const pages = ['Check inventory', 'Add assets']
+const pages = [{label: "Check asset", path: "/check-asset"}, {label: "Asset categories", path: "/asset-categories"}]
 
 export default function Layout() {
+	const navigate = useNavigate()
 	const auth = useContext(AuthContext)
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
 
@@ -88,13 +89,17 @@ export default function Layout() {
 								>
 									{pages.map((page) => (
 										<MenuItem
-											key={page}
-											onClick={handleCloseNavMenu}
+											key={page.label}
+											onClick={function() {
+													handleCloseNavMenu()
+													navigate(page.path)
+												}
+											}
 										>
 											<Typography
 												sx={{ textAlign: 'center' }}
 											>
-												{page}
+												{page.label}
 											</Typography>
 										</MenuItem>
 									))}
@@ -108,21 +113,24 @@ export default function Layout() {
 							>
 								{pages.map((page) => (
 									<Button
-										key={page}
-										onClick={handleCloseNavMenu}
+										key={page.label}
+										onClick={function() {
+												handleCloseNavMenu()
+												navigate(page.path)
+											}
+										}
 										sx={{
 											my: 2,
 											color: 'white',
 											display: 'block',
 										}}
 									>
-										{page}
+										{page.label}
 									</Button>
 								))}
 							</Box>
 							<Typography
-								variant="h5"
-								noWrap
+								variant="h6"
 								component="a"
 								sx={{
 									display: { xs: 'flex', md: 'none' },
@@ -144,6 +152,9 @@ export default function Layout() {
 			<Container
 				sx={{
 					padding: '20px',
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center'
 				}}
 			>
 				<Outlet />

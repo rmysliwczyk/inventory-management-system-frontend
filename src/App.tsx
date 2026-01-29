@@ -2,6 +2,8 @@ import Layout from './components/Layout'
 import { AuthProvider } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import CheckAsset from './pages/CheckAsset'
+import AssetCategories from './pages/AssetCategories'
 import PrivateRoute from './pages/PrivateRoute'
 import { BrowserRouter, Routes, Route } from 'react-router'
 
@@ -14,6 +16,8 @@ function App() {
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<Layout />}>
 							<Route path="" element={<Home />} />
+							<Route path="/check-asset" element={<CheckAsset />} />
+							<Route path="/asset-categories" element={<AssetCategories />} />
 						</Route>
 					</Route>
 				</Routes>
