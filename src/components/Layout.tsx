@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 
-const pages = [{label: "Check asset", path: "/check-asset"}, {label: "Asset categories", path: "/asset-categories"}]
+const pages = [{label: "Check asset", path: "/check-asset"}, {label: "Asset types", path: "/asset-types"}]
 
 export default function Layout() {
 	const navigate = useNavigate()

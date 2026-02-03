@@ -8,11 +8,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import type * as ReactQrScanner from '@yudiel/react-qr-scanner'
 import { useState, useEffect } from 'react'
+import type { AssetDetails } from '../types'
 
-interface AssetDetails {
-	id: string
-	description: string
-}
 
 export default function CheckAsset() {
 	const [showScanner, setShowScanner] = useState<boolean>(true)
@@ -22,7 +19,7 @@ export default function CheckAsset() {
 
 	useEffect(() => {
 		if (data) {
-			setAssetDetails({ id: data.id, description: data.description })
+			setAssetDetails({ id: data.id, description: data.description, "acquisition date": data.acquisition_date})
 		}
 	}, [data])
 
