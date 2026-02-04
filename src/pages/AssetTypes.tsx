@@ -1,5 +1,6 @@
 import useFetch from '../hooks/useFetch'
-import type { AssetTypeDetails } from '../types'
+import usePost from '../hooks/usePost'
+import type { AssetTypeDetails, NewAssetTypeDetails } from '../types'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -21,7 +22,8 @@ export default function AssetTypes() {
 	const [assetTypes, setAssetTypes] = useState<AssetTypeDetails[] | []>()
 	const [fetchUrl, setFetchUrl] = useState<string>('/asset-types')
 	const [labelsError, setLabelsError] = useState<string>()
-	const { data, error, loading } = useFetch<AssetTypeDetails[]>(fetchUrl)
+	const { refetch, data, error, loading } = useFetch<AssetTypeDetails[]>(fetchUrl)
+	const { post, data: postData, error: postError, loading: postLoading } = usePost<NewAssetTypeDetails>()
 
 	useEffect(() => {
 		if (data) {
@@ -29,12 +31,23 @@ export default function AssetTypes() {
 		}
 	}, [data])
 
+	useEffect(() => {
+		if(postData) {
+			handleCloseForm()
+			refetch()
+		}
+	}, [postData])
+
 	function handleOpenForm() {
 		setOpenForm(true)
 	}
 
 	function handleCloseForm() {
 		setOpenForm(false)
+	}
+
+	function handleSubmit(data: NewAssetTypeDetails) {
+		post("/asset-types", data)
 	}
 
 	async function printLabels(assetType: AssetTypeDetails) {
@@ -173,7 +186,7 @@ export default function AssetTypes() {
 						Add asset type
 					</Typography>
 					<Box id="modal-description" sx={{mt: 4}}>
-						<AssetTypeForm />
+						<AssetTypeForm onSubmit={handleSubmit} />
 					</Box>
 				</Box>
 			</Modal>

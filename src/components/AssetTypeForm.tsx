@@ -1,26 +1,19 @@
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
-import type { AssetTypeDetails } from '../types'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import type { NewAssetTypeDetails } from '../types'
 
-interface NewAssetTypeDetails {
-	name: string
-}
 
-export default function AssetTypeForm() {
+
+export default function AssetTypeForm({onSubmit} : {onSubmit: SubmitHandler<NewAssetTypeDetails>}) {
 	const {
 		register,
 		handleSubmit,
-		watch,
 		formState: { errors},
-	} = useForm<AssetTypeDetails>()
-	const onSubmit: SubmitHandler<AssetTypeDetails> = (data) => console.log(data)
-
-	console.log(watch("name"))
-
+	} = useForm<NewAssetTypeDetails>()
 
 	return (
 		<>

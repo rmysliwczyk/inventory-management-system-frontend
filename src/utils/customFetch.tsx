@@ -9,6 +9,10 @@ export default async function customFetch(
 	if (userData) {
 		user = JSON.parse(userData)
 
+		if (init?.headers instanceof Headers) {
+			init.headers = Object.fromEntries(init.headers)
+		}
+
 		if (user?.token) {
 			const headers = {
 				...(init?.headers ?? {}),

@@ -14,3 +14,7 @@ export interface AssetDetails {
 	description: string
 	acquisition_date: string
 }
+
+export interface NewAssetTypeDetails {
+	name: string
+}

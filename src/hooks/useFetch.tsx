@@ -1,7 +1,7 @@
 import { AuthContext } from '../context/AuthContext'
+import { parseApiError } from '../utils/apiErrorParser'
 import customFetch from '../utils/customFetch'
 import { useState, useEffect, useContext } from 'react'
-import { parseApiError } from '../utils/apiErrorParser'
 
 type FetchState<T> = {
 	data: T | null
@@ -32,13 +32,10 @@ function useFetch<T = unknown>(url: string, options?: RequestInit) {
 				try {
 					const headers = new Headers(options?.headers || {})
 
-					const res = await customFetch(
-						url,
-						{
-							...options,
-							headers,
-						}
-					)
+					const res = await customFetch(url, {
+						...options,
+						headers,
+					})
 
 					if (!res.ok) {
 						if (res.status == 401) {
