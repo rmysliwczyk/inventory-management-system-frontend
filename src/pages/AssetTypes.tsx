@@ -1,8 +1,14 @@
+import AssetForm from '../components/AssetForm'
 import AssetTypeForm from '../components/AssetTypeForm'
+import { AuthContext } from '../context/AuthContext'
 import useDelete from '../hooks/useDelete'
 import useFetch from '../hooks/useFetch'
 import usePost from '../hooks/usePost'
-import type { AssetTypeDetails, NewAssetTypeDetails } from '../types'
+import type {
+	AssetTypeDetails,
+	NewAssetDetails,
+	NewAssetTypeDetails,
+} from '../types'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -13,29 +19,43 @@ import Grid from '@mui/material/Grid'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import fontkit from '@pdf-lib/fontkit'
+import Dayjs from 'dayjs'
 import { PDFDocument, rgb } from 'pdf-lib'
 import QRCode from 'qrcode'
-import { useState, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export default function AssetTypes() {
 	const navigate = useNavigate()
+	const [openAddAssetTypeForm, setOpenAddAssetTypeForm] =
+		useState<boolean>(false)
 	const [openAddAssetForm, setOpenAddAssetForm] = useState<boolean>(false)
 	const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false)
 	const [assetTypeIdToDelete, setAssetTypeIdToDelete] = useState<
 		string | null
 	>(null)
+	const [assetTypeToAddAssetTo, setAssetTypeToAddAssetTo] =
+		useState<AssetTypeDetails | null>(null)
 	const [assetTypes, setAssetTypes] = useState<AssetTypeDetails[] | []>()
 	const [fetchUrl, setFetchUrl] = useState<string>('/asset-types')
 	const [labelsError, setLabelsError] = useState<string>()
+	const auth = useContext(AuthContext)
 	const { refetch, data, error, loading } =
 		useFetch<AssetTypeDetails[]>(fetchUrl)
 	const {
-		post,
-		data: postData,
-		error: postError,
-		loading: postLoading,
+		post: postAssetType,
+		reset: postAssetTypeReset,
+		data: postDataAssetType,
+		error: postErrorAssetType,
+		loading: postLoadingAssetType,
 	} = usePost<NewAssetTypeDetails>()
+	const {
+		post: postAsset,
+		reset: postAssetReset,
+		data: postDataAsset,
+		error: postErrorAsset,
+		loading: postLoadingAsset,
+	} = usePost<NewAssetDetails>()
 	const {
 		deletereq,
 		error: deleteError,
@@ -49,11 +69,18 @@ export default function AssetTypes() {
 	}, [data])
 
 	useEffect(() => {
-		if (postData) {
+		if (postDataAssetType) {
+			handleCloseAddAssetTypeForm()
+			refetch()
+		}
+	}, [postDataAssetType])
+
+	useEffect(() => {
+		if (postDataAsset) {
 			handleCloseAddAssetForm()
 			refetch()
 		}
-	}, [postData])
+	}, [postDataAsset])
 
 	useEffect(() => {
 		if (!deleteLoading) {
@@ -64,12 +91,24 @@ export default function AssetTypes() {
 		}
 	}, [deleteError, deleteLoading])
 
-	function handleOpenAddAssetForm() {
+	function handleOpenAddAssetTypeForm() {
+		setOpenAddAssetTypeForm(true)
+	}
+
+	function handleCloseAddAssetTypeForm() {
+		setOpenAddAssetTypeForm(false)
+		postAssetTypeReset()
+	}
+
+	function handleOpenAddAssetForm(element: AssetTypeDetails) {
+		setAssetTypeToAddAssetTo(element)
 		setOpenAddAssetForm(true)
 	}
 
 	function handleCloseAddAssetForm() {
 		setOpenAddAssetForm(false)
+		postAssetReset()
+		setAssetTypeToAddAssetTo(null)
 	}
 
 	function handleOpenConfirmDelete(element: AssetTypeDetails) {
@@ -82,9 +121,17 @@ export default function AssetTypes() {
 		setAssetTypeIdToDelete(null)
 	}
 
-	function handleSubmit(data: NewAssetTypeDetails) {
+	function handleSubmitAssetType(data: NewAssetTypeDetails) {
 		setAssetTypes([])
-		post('/asset-types', data)
+		postAssetType('/asset-types', data)
+	}
+
+	function handleSubmitAsset(data: NewAssetDetails) {
+		if (data.acquisition_date instanceof Dayjs && assetTypeToAddAssetTo) {
+			data.acquisition_date = data.acquisition_date.format('YYYY-MM-DD')
+			data.asset_type_id = assetTypeToAddAssetTo?.id
+			postAsset('/assets', data)
+		}
 	}
 
 	function handleDelete() {
@@ -205,8 +252,8 @@ export default function AssetTypes() {
 	return (
 		<>
 			<Modal
-				open={openAddAssetForm}
-				onClose={handleCloseAddAssetForm}
+				open={openAddAssetTypeForm}
+				onClose={handleCloseAddAssetTypeForm}
 				aria-labelledby="modal-title"
 				aria-describedby="modal-description"
 			>
@@ -237,7 +284,44 @@ export default function AssetTypes() {
 						Add asset type
 					</Typography>
 					<Box id="modal-description" sx={{ mt: 4 }}>
-						<AssetTypeForm onSubmit={handleSubmit} />
+						<AssetTypeForm onSubmit={handleSubmitAssetType} />
+					</Box>
+				</Box>
+			</Modal>
+			<Modal
+				open={openAddAssetForm}
+				onClose={handleCloseAddAssetForm}
+				aria-labelledby="modal-title"
+				aria-describedby="modal-description"
+			>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: '40%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						bgcolor: 'background.paper',
+						padding: '20px',
+						borderRadius: '15px',
+						minWidth: {
+							xs: 200,
+							sm: 300,
+						},
+					}}
+				>
+					<Typography
+						id="modal-title"
+						sx={{ textAlign: 'center' }}
+						variant="h5"
+					>
+						Add asset
+					</Typography>
+					<Box id="modal-description" sx={{ mt: 4 }}>
+						{postErrorAsset ? (
+							<Alert severity="error">{postErrorAsset}</Alert>
+						) : (
+							<AssetForm onSubmit={handleSubmitAsset} />
+						)}
 					</Box>
 				</Box>
 			</Modal>
@@ -296,6 +380,7 @@ export default function AssetTypes() {
 									sx={{
 										display: 'flex',
 										flexDirection: 'column',
+										minWidth: 300,
 										mb: 2,
 									}}
 								>
@@ -351,10 +436,10 @@ export default function AssetTypes() {
 			>
 				<Typography variant="h5">Asset types:</Typography>
 				{labelsError && <Alert severity="info">{labelsError}</Alert>}
-				<Button variant="outlined" onClick={handleOpenAddAssetForm}>
+				<Button variant="outlined" onClick={handleOpenAddAssetTypeForm}>
 					Add asset type
 				</Button>
-				{loading || postLoading || deleteLoading ? (
+				{loading || postLoadingAssetType || deleteLoading || !data ? (
 					<Box
 						sx={{
 							width: '100%',
@@ -387,7 +472,12 @@ export default function AssetTypes() {
 								([key, value]) =>
 									key !== 'assets' && (
 										<Grid
-											size={{ xs: 4, sm: 4, md: 3 }}
+											size={{
+												xs: 4,
+												sm: 4,
+												md: 4,
+												lg: 3,
+											}}
 											key={key}
 											sx={{ textAlign: 'center' }}
 										>
@@ -400,7 +490,7 @@ export default function AssetTypes() {
 										</Grid>
 									)
 							)}
-							<Grid size={{ xs: 12, sm: 12, md: 3 }}>
+							<Grid size={{ xs: 12, sm: 12, md: 12, lg: 3 }}>
 								<Box
 									sx={{
 										display: 'flex',
@@ -410,6 +500,15 @@ export default function AssetTypes() {
 										height: '100%',
 									}}
 								>
+									<Button
+										variant="outlined"
+										fullWidth={true}
+										onClick={function () {
+											handleOpenAddAssetForm(element)
+										}}
+									>
+										Add asset
+									</Button>
 									<Button variant="outlined" fullWidth={true}>
 										Take stock
 									</Button>
@@ -422,15 +521,17 @@ export default function AssetTypes() {
 									>
 										Print labels
 									</Button>
-									<Button
-										variant="outlined"
-										fullWidth={true}
-										onClick={function () {
-											handleOpenConfirmDelete(element)
-										}}
-									>
-										<DeleteIcon />
-									</Button>
+									{auth?.user?.role == 'ADMIN' && (
+										<Button
+											variant="outlined"
+											fullWidth={true}
+											onClick={function () {
+												handleOpenConfirmDelete(element)
+											}}
+										>
+											<DeleteIcon />
+										</Button>
+									)}
 								</Box>
 							</Grid>
 						</Grid>

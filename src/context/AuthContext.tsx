@@ -1,6 +1,6 @@
 import type { User } from '../types'
-import { createContext, useState, useEffect } from 'react'
 import customFetch from '../utils/customFetch'
+import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 interface AuthContext {
@@ -63,15 +63,19 @@ export function AuthProvider({ children }: { children: any }) {
 					const userData = await userResponse.json()
 					const userObject = {
 						username: userData.username,
+						role: userData.role,
 						token: tokenData.access_token,
 					}
-					window.localStorage.setItem('user', JSON.stringify(userObject))
+					window.localStorage.setItem(
+						'user',
+						JSON.stringify(userObject)
+					)
 					setError(null)
 					setUser(userObject)
 				}
 			}
 		} catch (error) {
-			if(error instanceof Error) {
+			if (error instanceof Error) {
 				setError(error)
 			}
 		}
@@ -82,13 +86,13 @@ export function AuthProvider({ children }: { children: any }) {
 	async function logoutAction() {
 		window.localStorage.removeItem('user')
 		setUser(null)
-		navigate("/login")
+		navigate('/login')
 	}
 
 	async function checkTokenIsValid() {
-		const response = await customFetch("/users/me");
-		if(response.status == 401) {
-			logoutAction();
+		const response = await customFetch('/users/me')
+		if (response.status == 401) {
+			logoutAction()
 		}
 	}
 
@@ -114,7 +118,7 @@ export function AuthProvider({ children }: { children: any }) {
 
 	useEffect(() => {
 		if (user) {
-			checkTokenIsValid();
+			checkTokenIsValid()
 		}
 	}, [user])
 

@@ -4,5 +4,6 @@
   "semi": false,
   "singleQuote": true,
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "useTabs": true
+  "useTabs": true,
+  "importOrderSortSpecifiers": true
 }

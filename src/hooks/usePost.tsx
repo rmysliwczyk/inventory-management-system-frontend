@@ -56,7 +56,11 @@ function usePost<T = unknown>() {
 		}
 	}
 
-	return { post, ...state }
+	const reset = async() => {
+		setState({data: null, error: null, loading: false})
+	}
+
+	return { post, reset, ...state }
 }
 
 export default usePost
