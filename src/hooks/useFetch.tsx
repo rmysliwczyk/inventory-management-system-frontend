@@ -23,6 +23,10 @@ function useFetch<T = unknown>(url: string, options?: RequestInit) {
 		setRefetchIndex((prevRefetchIndex) => prevRefetchIndex + 1)
 	}
 
+	function reset() {
+		setState({ data: null, error: null, loading: false})
+	}
+
 	useEffect(() => {
 		if (url !== '') {
 			let isCancelled = false
@@ -68,7 +72,7 @@ function useFetch<T = unknown>(url: string, options?: RequestInit) {
 		}
 	}, [url, JSON.stringify(options), auth?.user, refetchIndex])
 
-	return { ...state, refetch }
+	return { ...state, refetch, reset}
 }
 
 export default useFetch

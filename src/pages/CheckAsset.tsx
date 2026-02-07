@@ -1,5 +1,9 @@
 import { QrScanner } from '../components/QrScanner'
+import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
+import useDelete from '../hooks/useDelete'
+import type { AssetDetails } from '../types'
+import DeleteIcon from '@mui/icons-material/Delete'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -7,29 +11,67 @@ import Card from '@mui/material/Card'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import type * as ReactQrScanner from '@yudiel/react-qr-scanner'
-import { useState, useEffect } from 'react'
-import type { AssetDetails } from '../types'
-
+import { useContext, useEffect, useState } from 'react'
+import Modal from '@mui/material/Modal'
 
 export default function CheckAsset() {
 	const [showScanner, setShowScanner] = useState<boolean>(true)
-	const [assetDetails, setAssetDetails] = useState<AssetDetails | {}>({})
+	const [assetDetails, setAssetDetails] = useState<AssetDetails | null>(null)
 	const [fetchUrl, setFetchUrl] = useState<string>('')
+	const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false)
+	const auth = useContext(AuthContext)
 	const { data, error, loading } = useFetch<AssetDetails>(fetchUrl)
+	const {
+		deletereq,
+		error: deleteError,
+		loading: deleteLoading,
+	} = useDelete()
 
 	useEffect(() => {
 		if (data) {
-			setAssetDetails({ id: data.id, description: data.description, "acquisition date": data.acquisition_date})
+			setAssetDetails({
+				id: data.id,
+				description: data.description,
+				acquisition_date: data.acquisition_date,
+			})
+		} else {
+			setAssetDetails(null)
 		}
 	}, [data])
+
+	useEffect(() => {
+		if (!deleteLoading) {
+			if (!deleteError) {
+				handleCloseConfirmDelete()
+				setAssetDetails(null)
+				setShowScanner(true)
+			}
+		}
+	}, [deleteError, deleteLoading])
 
 	function handleScan(result: ReactQrScanner.IDetectedBarcode[]) {
 		setFetchUrl(`/assets/${result[0].rawValue}`)
 		setShowScanner(false)
 	}
 
+	function handleDelete() {
+		deletereq(`/assets/${assetDetails?.id}`)
+		setFetchUrl('')
+	}
+
 	function resetScanner() {
 		setShowScanner(true)
+		setAssetDetails(null)
+		setFetchUrl('')
+	}
+
+	function handleOpenConfirmDelete() {
+		setOpenConfirmDelete(true)
+
+	}
+
+	function handleCloseConfirmDelete() {
+		setOpenConfirmDelete(false)
 	}
 
 	if (showScanner) {
@@ -58,6 +100,103 @@ export default function CheckAsset() {
 	} else {
 		return (
 			<>
+				<Modal
+					open={openConfirmDelete}
+					onClose={handleCloseConfirmDelete}
+					aria-labelledby="modal-title"
+					aria-describedby="modal-description"
+				>
+					<Box
+						sx={{
+							position: 'absolute',
+							top: '40%',
+							left: '50%',
+							transform: 'translate(-50%, -50%)',
+							bgcolor: 'background.paper',
+							padding: '20px',
+							borderRadius: '15px',
+							maxWidth: 400,
+						}}
+					>
+						<Typography
+							id="modal-title"
+							sx={{ textAlign: 'center' }}
+							variant="h5"
+						>
+							Are you sure?
+						</Typography>
+						<Box id="modal-description" sx={{ mt: 4 }}>
+							{deleteError ? (
+								<>
+									<Box sx={{ minWidth: 200, mb: 2}}>
+										<Alert severity="error">
+											{deleteError}
+										</Alert>
+									</Box>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											gap: '5px',
+										}}
+									>
+										<Button
+											variant="contained"
+											onClick={handleCloseConfirmDelete}
+										>
+											Ok
+										</Button>
+									</Box>
+								</>
+							) : (
+								<>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'column',
+											minWidth: 240,
+											mb: 2,
+										}}
+									>
+										<Typography>
+											This action will delete asset with
+											ID:
+										</Typography>
+										<Typography
+											variant="subtitle2"
+											sx={{ textAlign: 'center' }}
+										>
+											{assetDetails?.id}
+										</Typography>
+									</Box>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											gap: '5px',
+										}}
+									>
+										<Button
+											variant="contained"
+											onClick={handleDelete}
+										>
+											Yes
+										</Button>
+										<Button
+											variant="outlined"
+											onClick={handleCloseConfirmDelete}
+										>
+											No
+										</Button>
+									</Box>
+								</>
+							)}
+						</Box>
+					</Box>
+				</Modal>
+
 				<Box
 					component={Card}
 					sx={{
@@ -92,27 +231,40 @@ export default function CheckAsset() {
 								key={key}
 								sx={{
 									display: 'flex',
-									alignItems: 'center',
-									flexWrap: 'wrap',
+									alignItems: 'flex-start',
 									gap: '10px',
 									width: '100%',
 								}}
 							>
-								<Typography variant="h6" sx={{ flexGrow: '1' }}>
-									{key.toUpperCase()}
+								<Typography
+									variant="subtitle2"
+									sx={{ flexGrow: '1' }}
+								>
+									{key.toUpperCase().replace('_', ' ')}
 								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ flexGrow: '1' }}
 								>
-									{value}
+									{value ? value : 'None'}
 								</Typography>
 							</Box>
 						))
 					) : (
 						''
 					)}
+
 					<Button onClick={resetScanner}>Scan another</Button>
+					{assetDetails && auth?.user?.role == "ADMIN" && (
+						<Button
+							color="error"
+							variant="outlined"
+							onClick={handleOpenConfirmDelete}
+							startIcon={<DeleteIcon />}
+						>
+							Delete
+						</Button>
+					)}
 				</Box>
 			</>
 		)
