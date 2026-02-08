@@ -22,6 +22,7 @@ export interface AssetTypeDetails {
 	id: string
 	name: string
 	assets?: AssetDetails[]
+	quantity: number
 }
 
 export interface NewAssetTypeDetails {

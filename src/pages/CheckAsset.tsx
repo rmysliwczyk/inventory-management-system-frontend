@@ -1,7 +1,7 @@
 import { QrScanner } from '../components/QrScanner'
 import { AuthContext } from '../context/AuthContext'
-import useFetch from '../hooks/useFetch'
 import useDelete from '../hooks/useDelete'
+import useFetch from '../hooks/useFetch'
 import type { AssetDetails } from '../types'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Alert from '@mui/material/Alert'
@@ -9,10 +9,11 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CircularProgress from '@mui/material/CircularProgress'
+import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import type * as ReactQrScanner from '@yudiel/react-qr-scanner'
 import { useContext, useEffect, useState } from 'react'
-import Modal from '@mui/material/Modal'
+import { isMobile } from 'react-device-detect'
 
 export default function CheckAsset() {
 	const [showScanner, setShowScanner] = useState<boolean>(true)
@@ -67,14 +68,32 @@ export default function CheckAsset() {
 
 	function handleOpenConfirmDelete() {
 		setOpenConfirmDelete(true)
-
 	}
 
 	function handleCloseConfirmDelete() {
 		setOpenConfirmDelete(false)
 	}
 
-	if (showScanner) {
+	if (!isMobile) {
+		return (
+			<Box
+				component={Card}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					gap: '20px',
+					padding: '20px',
+					overflow: 'auto',
+					maxWidth: '95%',
+				}}
+			>
+				<Alert severity="info">
+					This page is only available on a mobile device
+				</Alert>
+			</Box>
+		)
+	} else if (showScanner) {
 		return (
 			<>
 				<Box
@@ -128,7 +147,7 @@ export default function CheckAsset() {
 						<Box id="modal-description" sx={{ mt: 4 }}>
 							{deleteError ? (
 								<>
-									<Box sx={{ minWidth: 200, mb: 2}}>
+									<Box sx={{ minWidth: 200, mb: 2 }}>
 										<Alert severity="error">
 											{deleteError}
 										</Alert>
@@ -255,7 +274,7 @@ export default function CheckAsset() {
 					)}
 
 					<Button onClick={resetScanner}>Scan another</Button>
-					{assetDetails && auth?.user?.role == "ADMIN" && (
+					{assetDetails && auth?.user?.role == 'ADMIN' && (
 						<Button
 							color="error"
 							variant="outlined"

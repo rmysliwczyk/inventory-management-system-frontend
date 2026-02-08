@@ -21,9 +21,11 @@ import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import Dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
-import { printLabels} from '../utils/printLabels'
+import { printLabels } from '../utils/printLabels'
+import { useNavigate } from 'react-router'
 
 export default function AssetTypes() {
+	const navigate = useNavigate()
 	const [openAddAssetTypeForm, setOpenAddAssetTypeForm] =
 		useState<boolean>(false)
 	const [openEditAssetTypeForm, setOpenEditAssetTypeForm] = useState<boolean>(false)
@@ -515,6 +517,7 @@ export default function AssetTypes() {
 										<Button
 											variant="outlined"
 											fullWidth={true}
+											onClick={function() {navigate(`/take-stock/${element.id}`)}}
 										>
 											Take stock
 										</Button>
