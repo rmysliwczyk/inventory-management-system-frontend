@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useState, useEffect, useContext } from 'react'
-import { useNavigate, useLocation } from 'react-router'
+import { useNavigate } from 'react-router'
 
 export default function Login() {
 	const navigate = useNavigate()

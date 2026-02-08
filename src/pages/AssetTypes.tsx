@@ -21,7 +21,6 @@ import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import Dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
 import { printLabels} from '../utils/printLabels'
 
 export default function AssetTypes() {
@@ -37,7 +36,7 @@ export default function AssetTypes() {
 		string | null
 	>(null)
 	const [assetTypes, setAssetTypes] = useState<AssetTypeDetails[] | []>()
-	const [fetchUrl, setFetchUrl] = useState<string>('/asset-types')
+	const [fetchUrl] = useState<string>('/asset-types')
 	const [labelsError, setLabelsError] = useState<string>()
 	const auth = useContext(AuthContext)
 	const { refetch, data, error, loading } =
@@ -47,21 +46,18 @@ export default function AssetTypes() {
 		reset: postAssetTypeReset,
 		data: postDataAssetType,
 		error: postErrorAssetType,
-		loading: postLoadingAssetType,
 	} = usePost<NewAssetTypeDetails>()
 	const {
 		put: putAssetType,
 		reset: putAssetTypeReset,
 		data: putDataAssetType,
 		error: putErrorAssetType,
-		loading: putLoadingAssetType,
 	} = usePut<NewAssetTypeDetails>()
 	const {
 		post: postAsset,
 		reset: postAssetReset,
 		data: postDataAsset,
 		error: postErrorAsset,
-		loading: postLoadingAsset,
 	} = usePost<NewAssetDetails>()
 	const {
 		deletereq,

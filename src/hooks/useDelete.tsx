@@ -8,7 +8,7 @@ type DeleteState = {
 	loading: boolean
 }
 
-function useDelete<T = unknown>() {
+function useDelete() {
 	const [state, setState] = useState<DeleteState>({
 		error: null,
 		loading: false
