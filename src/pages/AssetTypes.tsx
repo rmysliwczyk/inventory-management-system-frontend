@@ -10,6 +10,7 @@ import type {
 	NewAssetDetails,
 	NewAssetTypeDetails,
 } from '../types'
+import { printLabels } from '../utils/printLabels'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -21,17 +22,18 @@ import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import Dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
-import { printLabels } from '../utils/printLabels'
 import { useNavigate } from 'react-router'
 
 export default function AssetTypes() {
 	const navigate = useNavigate()
 	const [openAddAssetTypeForm, setOpenAddAssetTypeForm] =
 		useState<boolean>(false)
-	const [openEditAssetTypeForm, setOpenEditAssetTypeForm] = useState<boolean>(false)
+	const [openEditAssetTypeForm, setOpenEditAssetTypeForm] =
+		useState<boolean>(false)
 	const [openAddAssetForm, setOpenAddAssetForm] = useState<boolean>(false)
 	const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false)
-	const [assetTypeToEdit, setAssetTypeToEdit] = useState<AssetTypeDetails | null>(null)
+	const [assetTypeToEdit, setAssetTypeToEdit] =
+		useState<AssetTypeDetails | null>(null)
 	const [assetTypeToAddAssetTo, setAssetTypeToAddAssetTo] =
 		useState<AssetTypeDetails | null>(null)
 	const [assetTypeIdToDelete, setAssetTypeIdToDelete] = useState<
@@ -111,7 +113,7 @@ export default function AssetTypes() {
 		setOpenAddAssetTypeForm(false)
 		postAssetTypeReset()
 	}
-	
+
 	function handleOpenEditAssetTypeForm(element: AssetTypeDetails) {
 		setAssetTypeToEdit(element)
 		setOpenEditAssetTypeForm(true)
@@ -165,7 +167,6 @@ export default function AssetTypes() {
 		deletereq(`/asset-types/${assetTypeIdToDelete}`)
 	}
 
-
 	return (
 		<>
 			<Modal
@@ -217,7 +218,10 @@ export default function AssetTypes() {
 								</Button>
 							</Box>
 						) : (
-							<AssetTypeForm onSubmit={handleSubmitPostAssetType} submitButtonText="Add"/>
+							<AssetTypeForm
+								onSubmit={handleSubmitPostAssetType}
+								submitButtonText="Add"
+							/>
 						)}
 					</Box>
 				</Box>
@@ -271,7 +275,11 @@ export default function AssetTypes() {
 								</Button>
 							</Box>
 						) : (
-							<AssetTypeForm onSubmit={handleSubmitPutAssetType} submitButtonText="Update" assetTypeToEdit={assetTypeToEdit!}/>
+							<AssetTypeForm
+								onSubmit={handleSubmitPutAssetType}
+								submitButtonText="Update"
+								assetTypeToEdit={assetTypeToEdit!}
+							/>
 						)}
 					</Box>
 				</Box>
@@ -434,9 +442,14 @@ export default function AssetTypes() {
 			>
 				<Typography variant="h5">Asset types:</Typography>
 				{labelsError && <Alert severity="info">{labelsError}</Alert>}
-				<Button variant="outlined" onClick={handleOpenAddAssetTypeForm}>
-					Add asset type
-				</Button>
+				{auth?.user?.role == 'ADMIN' && (
+					<Button
+						variant="outlined"
+						onClick={handleOpenAddAssetTypeForm}
+					>
+						Add asset type
+					</Button>
+				)}
 				{loading || !data ? (
 					<Box
 						sx={{
@@ -503,21 +516,27 @@ export default function AssetTypes() {
 											height: '100%',
 										}}
 									>
-
-										{auth?.user?.role == 'ADMIN' && (<Button
-											variant="outlined"
-											fullWidth={true}
-											onClick={function () {
-												handleOpenAddAssetForm(element)
-											}}
-										>
-											Add asset
-										</Button>
+										{auth?.user?.role == 'ADMIN' && (
+											<Button
+												variant="outlined"
+												fullWidth={true}
+												onClick={function () {
+													handleOpenAddAssetForm(
+														element
+													)
+												}}
+											>
+												Add asset
+											</Button>
 										)}
 										<Button
 											variant="outlined"
 											fullWidth={true}
-											onClick={function() {navigate(`/take-stock/${element.id}`)}}
+											onClick={function () {
+												navigate(
+													`/take-stock/${element.id}`
+												)
+											}}
 										>
 											Take stock
 										</Button>
@@ -537,7 +556,10 @@ export default function AssetTypes() {
 											variant="outlined"
 											fullWidth={true}
 											onClick={function () {
-												printLabels(element, setLabelsError)
+												printLabels(
+													element,
+													setLabelsError
+												)
 											}}
 										>
 											Print labels
@@ -545,7 +567,7 @@ export default function AssetTypes() {
 										<Button
 											variant="outlined"
 											fullWidth={true}
-											onClick={function() {
+											onClick={function () {
 												handleOpenEditAssetTypeForm(
 													element
 												)
