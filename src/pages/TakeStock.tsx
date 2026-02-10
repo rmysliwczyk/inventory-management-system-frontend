@@ -19,8 +19,10 @@ export default function TakeStock() {
 	const { assetTypeId } = useParams()
 	const [takingStockFinished, setTakingStockFinished] =
 		useState<boolean>(false)
-	const [openErrorModal, setOpenErrorModal] = useState<boolean>(false)
+	const [openModal, setOpenModal] = useState<boolean>(false)
 	const [qrCodeError, setQrCodeError] = useState<string | null>(null)
+	const [lastScannedAsset, setLastScannedAsset] =
+		useState<AssetDetails | null>(null)
 	const [scannedAssets, setScannedAssets] = useState<AssetDetails[]>([])
 	const [assetsLeftToScan, setAssetsLeftToScan] = useState<AssetDetails[]>([])
 	const [assetTypeDetails, setAssetTypeDetails] = useState<AssetTypeDetails>()
@@ -63,24 +65,31 @@ export default function TakeStock() {
 			setAssetsLeftToScan((prev) =>
 				prev.filter((asset) => asset.id != result[0].rawValue)
 			)
+			setLastScannedAsset({
+				id: scannedAsset.id,
+				description: scannedAsset.description,
+				acquisition_date: scannedAsset.acquisition_date,
+			})
+			setOpenModal(true)
 		} else {
 			setQrCodeError(
 				"Qr code not recognized. It's not the Qr code of this asset type."
 			)
-			setOpenErrorModal(true)
+			setOpenModal(true)
 		}
 	}
 
-	function handleCloseErrorModal() {
-		setOpenErrorModal(false)
+	function handleCloseModal() {
+		setOpenModal(false)
 		setQrCodeError(null)
+		setLastScannedAsset(null)
 	}
 
 	return (
 		<>
 			<Modal
-				open={openErrorModal}
-				onClose={handleCloseErrorModal}
+				open={openModal}
+				onClose={handleCloseModal}
 				aria-labelledby="modal-title"
 				aria-describedby="modal-description"
 			>
@@ -94,7 +103,7 @@ export default function TakeStock() {
 						padding: '20px',
 						borderRadius: '15px',
 						minWidth: {
-							xs: 200,
+							xs: 250,
 							sm: 300,
 						},
 					}}
@@ -104,7 +113,9 @@ export default function TakeStock() {
 						sx={{ textAlign: 'center' }}
 						variant="h5"
 					>
-						Qr Code Error
+						{qrCodeError
+							? 'Qr Code Error'
+							: 'Scanned Asset Details'}
 					</Typography>
 					<Box
 						id="modal-description"
@@ -116,14 +127,43 @@ export default function TakeStock() {
 							gap: '5px',
 						}}
 					>
-						<Alert severity="error">
-							The scanned Qr code does not belong to an asset of
-							this asset type
-						</Alert>
-						<Button
-							variant="contained"
-							onClick={handleCloseErrorModal}
-						>
+						{qrCodeError ? (
+							<Alert severity="error">
+								The scanned Qr code does not belong to an asset
+								of this asset type
+							</Alert>
+						) : (
+							lastScannedAsset &&
+							Object.entries(lastScannedAsset).map(
+								([key, value]) => (
+									<Box
+										key={key}
+										sx={{
+											display: 'flex',
+											alignItems: 'flex-start',
+											gap: '10px',
+											width: '100%',
+										}}
+									>
+										<Typography
+											variant="subtitle2"
+											sx={{ flexGrow: '1' }}
+										>
+											{key
+												.toUpperCase()
+												.replace('_', ' ')}
+										</Typography>
+										<Typography
+											variant="body2"
+											sx={{ flexGrow: '1' }}
+										>
+											{value ? value : 'None'}
+										</Typography>
+									</Box>
+								)
+							)
+						)}
+						<Button variant="contained" onClick={handleCloseModal}>
 							Ok
 						</Button>
 					</Box>
@@ -206,7 +246,13 @@ export default function TakeStock() {
 						</Typography>
 						<Box>
 							{assetTypeDetails ? (
-								<QrScanner onScan={handleScan} />
+								<QrScanner
+									onScan={handleScan}
+									paused={
+										qrCodeError != null ||
+										lastScannedAsset != null
+									}
+								/>
 							) : (
 								<CircularProgress />
 							)}

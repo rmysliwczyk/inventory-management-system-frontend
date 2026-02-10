@@ -82,10 +82,11 @@ export default function CheckAsset() {
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					gap: '20px',
+					gap: '15px',
 					padding: '20px',
 					overflow: 'auto',
-					maxWidth: '95%',
+					width: '95%',
+					minHeight: '70vh',
 				}}
 			>
 				<Alert severity="info">
@@ -102,9 +103,10 @@ export default function CheckAsset() {
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						gap: '30px',
+						gap: '20px',
 						padding: '20px',
 						overflow: 'auto',
+						maxWidth: '95%',
 					}}
 				>
 					<Typography variant="h6">

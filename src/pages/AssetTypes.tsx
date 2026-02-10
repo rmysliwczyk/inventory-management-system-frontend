@@ -92,6 +92,7 @@ export default function AssetTypes() {
 	useEffect(() => {
 		if (postDataAsset) {
 			handleCloseAddAssetForm()
+			setLabelsError("")
 			refetch()
 		}
 	}, [postDataAsset])
