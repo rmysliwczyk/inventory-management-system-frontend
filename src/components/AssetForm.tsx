@@ -10,12 +10,17 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import { Controller, useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Typography from '@mui/material/Typography'
+import Checkbox from '@mui/material/Checkbox'
 
 export default function AssetForm({
 	onSubmit,
 }: {
 	onSubmit: SubmitHandler<NewAssetDetails>
 }) {
+	const [useDebug, setUseDebug] = useState<boolean>(false)
 	const {
 		control,
 		register,
@@ -26,6 +31,12 @@ export default function AssetForm({
 			acquisition_date: dayjs(),
 		},
 	})
+
+	useEffect(() => {
+		if (import.meta.env['VITE_DEBUG_ENABLED'] == "1") {
+			setUseDebug(true)
+		}
+	}, [])
 
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en">
@@ -75,6 +86,25 @@ export default function AssetForm({
 							Add
 						</Button>
 					</FormControl>
+					{useDebug && (
+						<Box>
+							<Typography>Debugging options</Typography>
+							<FormControl>
+								<FormControlLabel
+									control={<Checkbox />}
+									label="Send spoofed name of over 128 characters"
+									{...register(
+										'debugOptions.tooManyCharacters'
+									)}
+								/>
+								<FormControlLabel
+									control={<Checkbox />}
+									label="Send to non-existent endpoint"
+									{...register('debugOptions.badEndpoint')}
+								/>
+							</FormControl>
+						</Box>
+					)}
 				</Box>
 			</form>
 		</LocalizationProvider>

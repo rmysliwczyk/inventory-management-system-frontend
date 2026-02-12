@@ -1,5 +1,12 @@
 import type { Dayjs } from 'dayjs'
 
+interface DebugOptions {
+	debugOptions?: {
+		badEndpoint: boolean
+		tooManyCharacters: boolean
+	}
+}
+
 export interface User {
 	username: string | undefined
 	token: string
@@ -12,7 +19,7 @@ export interface AssetDetails {
 	acquisition_date: string
 }
 
-export interface NewAssetDetails {
+export interface NewAssetDetails extends DebugOptions {
 	description: string | null
 	acquisition_date: Dayjs | string
 	asset_type_id: string
@@ -25,6 +32,6 @@ export interface AssetTypeDetails {
 	quantity: number
 }
 
-export interface NewAssetTypeDetails {
+export interface NewAssetTypeDetails extends DebugOptions{
 	name: string
 }

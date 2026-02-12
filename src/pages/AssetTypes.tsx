@@ -92,7 +92,7 @@ export default function AssetTypes() {
 	useEffect(() => {
 		if (postDataAsset) {
 			handleCloseAddAssetForm()
-			setLabelsError("")
+			setLabelsError('')
 			refetch()
 		}
 	}, [postDataAsset])
@@ -148,18 +148,66 @@ export default function AssetTypes() {
 	}
 
 	function handleSubmitPostAssetType(data: NewAssetTypeDetails) {
-		postAssetType('/asset-types', data)
+		if (data.debugOptions) {
+			console.log('Debugging options enabled for AssetType POST request')
+
+			if (data.debugOptions.tooManyCharacters) {
+				data.name = 'A'.repeat(129)
+			}
+
+			if (data.debugOptions.badEndpoint) {
+				console.log('Simulating a request to a non-existent endpoint')
+				postAssetType('/made-up-endpoint', data)
+			} else {
+				postAssetType('/asset-types', data)
+			}
+		} else {
+			postAssetType('/asset-types', data)
+		}
 	}
 
 	function handleSubmitPutAssetType(data: NewAssetTypeDetails) {
-		putAssetType(`/asset-types/${assetTypeToEdit?.id}`, data)
+		if (data.debugOptions) {
+			console.log('Debugging options enabled for AssetType POST request')
+
+			if (data.debugOptions.tooManyCharacters) {
+				data.name = 'A'.repeat(129)
+			}
+
+			if (data.debugOptions.badEndpoint) {
+				console.log('Simulating a request to a non-existent endpoint')
+				putAssetType(`/made-up-endpoint/${assetTypeToEdit?.id}`, data)
+			} else {
+				putAssetType(`/asset-types/${assetTypeToEdit?.id}`, data)
+			}
+		} else {
+			putAssetType(`/asset-types/${assetTypeToEdit?.id}`, data)
+		}
 	}
 
 	function handleSubmitAsset(data: NewAssetDetails) {
 		if (data.acquisition_date instanceof Dayjs && assetTypeToAddAssetTo) {
 			data.acquisition_date = data.acquisition_date.format('YYYY-MM-DD')
 			data.asset_type_id = assetTypeToAddAssetTo?.id
-			postAsset('/assets', data)
+
+			if (data.debugOptions) {
+				console.log('Debugging options enabled for Asset POST request')
+
+				if (data.debugOptions.tooManyCharacters) {
+					data.description = 'A'.repeat(2057)
+				}
+
+				if (data.debugOptions.badEndpoint) {
+					console.log(
+						'Simulating a request to a non-existent endpoint'
+					)
+					postAsset('/made-up-endpoint', data)
+				} else {
+					postAsset('/assets', data)
+				}
+			} else {
+				postAsset('/assets', data)
+			}
 		}
 	}
 
@@ -324,7 +372,12 @@ export default function AssetTypes() {
 								}}
 							>
 								<Alert severity="error">{postErrorAsset}</Alert>
-								<Button variant="contained">Ok</Button>
+								<Button
+									variant="contained"
+									onClick={handleCloseAddAssetForm}
+								>
+									Ok
+								</Button>
 							</Box>
 						) : (
 							<AssetForm onSubmit={handleSubmitAsset} />

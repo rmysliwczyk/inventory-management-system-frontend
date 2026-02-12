@@ -1,8 +1,12 @@
 import type { NewAssetTypeDetails } from '../types'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 
@@ -15,6 +19,7 @@ export default function AssetTypeForm({
 	submitButtonText: string
 	assetTypeToEdit?: NewAssetTypeDetails
 }) {
+	const [useDebug, setUseDebug] = useState<boolean>(false)
 	const {
 		register,
 		handleSubmit,
@@ -22,6 +27,12 @@ export default function AssetTypeForm({
 	} = useForm<NewAssetTypeDetails>({
 		defaultValues: { ...assetTypeToEdit },
 	})
+
+	useEffect(() => {
+		if (import.meta.env['VITE_DEBUG_ENABLED'] == '1') {
+			setUseDebug(true)
+		}
+	}, [])
 
 	return (
 		<>
@@ -54,6 +65,25 @@ export default function AssetTypeForm({
 							{submitButtonText}
 						</Button>
 					</FormControl>
+					{useDebug && (
+						<Box>
+							<Typography>Debugging options</Typography>
+							<FormControl>
+								<FormControlLabel
+									control={<Checkbox />}
+									label="Send spoofed name of over 128 characters"
+									{...register(
+										'debugOptions.tooManyCharacters'
+									)}
+								/>
+								<FormControlLabel
+									control={<Checkbox />}
+									label="Send to non-existent endpoint"
+									{...register('debugOptions.badEndpoint')}
+								/>
+							</FormControl>
+						</Box>
+					)}
 				</Box>
 			</form>
 		</>
