@@ -5,6 +5,7 @@ React Frontend for Inventory Management System. Check out the API [here](https:/
 - 🏷️ Generating asset tags (labels) in PDF, ready for printing
 - ⛶ Qr Code scanner for scanning asset tags
 - 📦 Quick and intuitive system for taking stock of assets
+- 🌙 Dark mode with system preference awareness
 - 🛂 Authorization with Admin and User actions separation
 - 📱Responsive design for mobile and desktop
 - 🔐 Session management with Secure JWT Tokens
