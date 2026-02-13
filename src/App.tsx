@@ -8,27 +8,42 @@ import TakeStock from './pages/TakeStock'
 import PrivateRoute from './pages/PrivateRoute'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
 
 function App() {
-	const theme = createTheme({})
+	const theme = createTheme({
+		palette: {
+			mode: 'light',
+			background: {
+				default: '#F2F0EF'
+			}
+		},
+		colorSchemes: {
+			dark: true
+		}
+		
+	})
 	return (
-		<ThemeProvider theme={theme}>
-		<BrowserRouter>
-			<AuthProvider>
-				<Routes>
-					<Route path="/login" element={<Login />} />
-					<Route element={<PrivateRoute />}>
-						<Route path="/" element={<Layout />}>
-							<Route path="" element={<Home />} />
-							<Route path="/check-asset" element={<CheckAsset />} />
-							<Route path="/asset-types" element={<AssetTypes />} />
-							<Route path="/take-stock/:assetTypeId" element={<TakeStock />} />
+		<>
+			<ThemeProvider theme={theme}>
+			<CssBaseline enableColorScheme/>
+			<BrowserRouter>
+				<AuthProvider>
+					<Routes>
+						<Route path="/login" element={<Login />} />
+						<Route element={<PrivateRoute />}>
+							<Route path="/" element={<Layout />}>
+								<Route path="" element={<Home />} />
+								<Route path="/check-asset" element={<CheckAsset />} />
+								<Route path="/asset-types" element={<AssetTypes />} />
+								<Route path="/take-stock/:assetTypeId" element={<TakeStock />} />
+							</Route>
 						</Route>
-					</Route>
-				</Routes>
-			</AuthProvider>
-		</BrowserRouter>
-		</ThemeProvider>
+					</Routes>
+				</AuthProvider>
+			</BrowserRouter>
+			</ThemeProvider>
+		</>
 	)
 }
 

@@ -9,8 +9,11 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import { useColorScheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 const pages = [{label: "Check asset", path: "/check-asset"}, {label: "Asset types", path: "/asset-types"}]
 
@@ -18,6 +21,16 @@ export default function Layout() {
 	const navigate = useNavigate()
 	const auth = useContext(AuthContext)
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+	const { mode, setMode } = useColorScheme()
+	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+	useEffect(() => {
+		if(prefersDarkMode) {
+			setMode('dark')
+		} else {
+			setMode('light')
+		}
+	}, [prefersDarkMode])
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget)
@@ -30,6 +43,20 @@ export default function Layout() {
 	function logout() {
 		if (auth) {
 			auth.logoutAction()
+		}
+	}
+
+	function toggleColorSchemeMode() {
+		if(mode == "system") {
+			if(prefersDarkMode) {
+				setMode('light')
+			} else {
+				setMode('dark')
+			}
+		} else if(mode == "light"){
+			setMode('dark')
+		} else {
+			setMode('light')
 		}
 	}
 
@@ -142,6 +169,9 @@ export default function Layout() {
 							>
 								Inventory Management System
 							</Typography>
+							<Button color="inherit" onClick={toggleColorSchemeMode}>
+								<DarkModeIcon/>
+							</Button>
 							<Button color="inherit" onClick={logout}>
 								Logout
 							</Button>
