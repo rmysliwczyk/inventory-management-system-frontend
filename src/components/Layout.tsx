@@ -1,4 +1,5 @@
 import { AuthContext } from '../context/AuthContext'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
 import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -9,13 +10,15 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useContext, useState, useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router'
-import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useContext, useEffect, useState } from 'react'
+import { Outlet, useNavigate } from 'react-router'
 
-const pages = [{label: "Check asset", path: "/check-asset"}, {label: "Asset types", path: "/asset-types"}]
+const pages = [
+	{ label: 'Check asset', path: '/check-asset' },
+	{ label: 'Asset types', path: '/asset-types' },
+]
 
 export default function Layout() {
 	const navigate = useNavigate()
@@ -25,7 +28,7 @@ export default function Layout() {
 	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 
 	useEffect(() => {
-		if(prefersDarkMode) {
+		if (prefersDarkMode) {
 			setMode('dark')
 		} else {
 			setMode('light')
@@ -47,13 +50,13 @@ export default function Layout() {
 	}
 
 	function toggleColorSchemeMode() {
-		if(mode == "system") {
-			if(prefersDarkMode) {
+		if (mode == 'system') {
+			if (prefersDarkMode) {
 				setMode('light')
 			} else {
 				setMode('dark')
 			}
-		} else if(mode == "light"){
+		} else if (mode == 'light') {
 			setMode('dark')
 		} else {
 			setMode('light')
@@ -76,6 +79,10 @@ export default function Layout() {
 									color: 'inherit',
 									fontWeight: 700,
 									textDecoration: 'none',
+									cursor: 'pointer',
+								}}
+								onClick={function () {
+									navigate('/')
 								}}
 							>
 								Inventory Management System
@@ -117,11 +124,10 @@ export default function Layout() {
 									{pages.map((page) => (
 										<MenuItem
 											key={page.label}
-											onClick={function() {
-													handleCloseNavMenu()
-													navigate(page.path)
-												}
-											}
+											onClick={function () {
+												handleCloseNavMenu()
+												navigate(page.path)
+											}}
 										>
 											<Typography
 												sx={{ textAlign: 'center' }}
@@ -141,11 +147,10 @@ export default function Layout() {
 								{pages.map((page) => (
 									<Button
 										key={page.label}
-										onClick={function() {
-												handleCloseNavMenu()
-												navigate(page.path)
-											}
-										}
+										onClick={function () {
+											handleCloseNavMenu()
+											navigate(page.path)
+										}}
 										sx={{
 											my: 2,
 											color: 'white',
@@ -165,12 +170,19 @@ export default function Layout() {
 									color: 'inherit',
 									fontWeight: 700,
 									textDecoration: 'none',
+									cursor: 'pointer',
+								}}
+								onClick={function () {
+									navigate('/')
 								}}
 							>
 								Inventory Management System
 							</Typography>
-							<Button color="inherit" onClick={toggleColorSchemeMode}>
-								<DarkModeIcon/>
+							<Button
+								color="inherit"
+								onClick={toggleColorSchemeMode}
+							>
+								<DarkModeIcon />
 							</Button>
 							<Button color="inherit" onClick={logout}>
 								Logout
@@ -184,7 +196,7 @@ export default function Layout() {
 					padding: '20px',
 					display: 'flex',
 					flexDirection: 'column',
-					alignItems: 'center'
+					alignItems: 'center',
 				}}
 			>
 				<Outlet />
