@@ -24,14 +24,18 @@ import Dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+type ModalContent =
+	| 'addAssetType'
+	| 'editAssetType'
+	| 'addAsset'
+	| 'confirmDelete'
+	| 'noAssetsForLabels'
+
 export default function AssetTypes() {
 	const navigate = useNavigate()
-	const [openAddAssetTypeForm, setOpenAddAssetTypeForm] =
-		useState<boolean>(false)
-	const [openEditAssetTypeForm, setOpenEditAssetTypeForm] =
-		useState<boolean>(false)
-	const [openAddAssetForm, setOpenAddAssetForm] = useState<boolean>(false)
-	const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false)
+	const [openModal, setOpenModal] = useState<boolean>(false)
+	const [modalContent, setModalContent] = useState<ModalContent | null>(null)
+
 	const [assetTypeToEdit, setAssetTypeToEdit] =
 		useState<AssetTypeDetails | null>(null)
 	const [assetTypeToAddAssetTo, setAssetTypeToAddAssetTo] =
@@ -77,21 +81,21 @@ export default function AssetTypes() {
 
 	useEffect(() => {
 		if (postDataAssetType) {
-			handleCloseAddAssetTypeForm()
+			handleCloseModal()
 			refetch()
 		}
 	}, [postDataAssetType])
 
 	useEffect(() => {
 		if (putDataAssetType) {
-			handleCloseEditAssetTypeForm()
+			handleCloseModal()
 			refetch()
 		}
 	}, [putDataAssetType])
 
 	useEffect(() => {
 		if (postDataAsset) {
-			handleCloseAddAssetForm()
+			handleCloseModal()
 			setLabelsError('')
 			refetch()
 		}
@@ -100,51 +104,53 @@ export default function AssetTypes() {
 	useEffect(() => {
 		if (!deleteLoading) {
 			if (!deleteError) {
-				handleCloseConfirmDelete()
+				handleCloseModal()
 				refetch()
 			}
 		}
 	}, [deleteError, deleteLoading])
 
-	function handleOpenAddAssetTypeForm() {
-		setOpenAddAssetTypeForm(true)
+	useEffect(() => {
+		if (labelsError) {
+			handleOpenModal('noAssetsForLabels')
+		}
+	}, [labelsError])
+
+	function handleOpenModal(
+		desiredContent: ModalContent,
+		element?: AssetTypeDetails
+	) {
+		setModalContent(desiredContent)
+
+		if (desiredContent == 'editAssetType') {
+			setAssetTypeToEdit(element!)
+		} else if (desiredContent == 'addAsset') {
+			setAssetTypeToAddAssetTo(element!)
+		} else if (desiredContent == 'confirmDelete') {
+			setAssetTypeIdToDelete(element!.id)
+		}
+
+		setOpenModal(true)
 	}
 
-	function handleCloseAddAssetTypeForm() {
-		setOpenAddAssetTypeForm(false)
-		postAssetTypeReset()
-	}
+	function handleCloseModal() {
+		setOpenModal(false)
 
-	function handleOpenEditAssetTypeForm(element: AssetTypeDetails) {
-		setAssetTypeToEdit(element)
-		setOpenEditAssetTypeForm(true)
-	}
+		if (modalContent == 'addAssetType') {
+			postAssetTypeReset()
+		} else if (modalContent == 'editAssetType') {
+			setAssetTypeToEdit(null)
+			putAssetTypeReset()
+		} else if (modalContent == 'addAsset') {
+			setAssetTypeToAddAssetTo(null)
+			postAssetReset()
+		} else if (modalContent == 'confirmDelete') {
+			setAssetTypeIdToDelete(null)
+		} else if (modalContent == 'noAssetsForLabels') {
+			setLabelsError('')
+		}
 
-	function handleCloseEditAssetTypeForm() {
-		setOpenEditAssetTypeForm(false)
-		setAssetTypeToEdit(null)
-		putAssetTypeReset()
-	}
-
-	function handleOpenAddAssetForm(element: AssetTypeDetails) {
-		setAssetTypeToAddAssetTo(element)
-		setOpenAddAssetForm(true)
-	}
-
-	function handleCloseAddAssetForm() {
-		setOpenAddAssetForm(false)
-		setAssetTypeToAddAssetTo(null)
-		postAssetReset()
-	}
-
-	function handleOpenConfirmDelete(element: AssetTypeDetails) {
-		setOpenConfirmDelete(true)
-		setAssetTypeIdToDelete(element.id)
-	}
-
-	function handleCloseConfirmDelete() {
-		setOpenConfirmDelete(false)
-		setAssetTypeIdToDelete(null)
+		setModalContent(null)
 	}
 
 	function handleSubmitPostAssetType(data: NewAssetTypeDetails) {
@@ -219,8 +225,8 @@ export default function AssetTypes() {
 	return (
 		<>
 			<Modal
-				open={openAddAssetTypeForm}
-				onClose={handleCloseAddAssetTypeForm}
+				open={openModal}
+				onClose={handleCloseModal}
 				aria-labelledby="modal-title"
 				aria-describedby="modal-description"
 			>
@@ -244,240 +250,186 @@ export default function AssetTypes() {
 						sx={{ textAlign: 'center' }}
 						variant="h5"
 					>
-						Add asset type
+						{modalContent == 'addAssetType'
+							? 'Add asset type'
+							: modalContent == 'editAssetType'
+								? 'Edit asset type'
+								: modalContent == 'addAsset'
+									? 'Add asset'
+									: modalContent == 'confirmDelete'
+										? 'Are you sure?'
+										: modalContent == 'noAssetsForLabels' &&
+											"No labels to print"}
 					</Typography>
 					<Box id="modal-description" sx={{ mt: 4 }}>
-						{postErrorAssetType ? (
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									gap: '5px',
-								}}
-							>
-								<Alert severity="error">
-									{postErrorAssetType}
-								</Alert>
-								<Button
-									variant="contained"
-									onClick={handleCloseAddAssetTypeForm}
-								>
-									Ok
-								</Button>
-							</Box>
-						) : (
-							<AssetTypeForm
-								onSubmit={handleSubmitPostAssetType}
-								submitButtonText="Add"
-							/>
-						)}
-					</Box>
-				</Box>
-			</Modal>
-			<Modal
-				open={openEditAssetTypeForm}
-				onClose={handleCloseEditAssetTypeForm}
-				aria-labelledby="modal-title"
-				aria-describedby="modal-description"
-			>
-				<Box
-					sx={{
-						position: 'absolute',
-						top: '40%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-						bgcolor: 'background.paper',
-						padding: '20px',
-						borderRadius: '15px',
-						minWidth: {
-							xs: 200,
-							sm: 300,
-						},
-					}}
-				>
-					<Typography
-						id="modal-title"
-						sx={{ textAlign: 'center' }}
-						variant="h5"
-					>
-						Edit asset type
-					</Typography>
-					<Box id="modal-description" sx={{ mt: 4 }}>
-						{putErrorAssetType ? (
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									gap: '5px',
-								}}
-							>
-								<Alert severity="error">
-									{putErrorAssetType}
-								</Alert>
-								<Button
-									variant="contained"
-									onClick={handleCloseEditAssetTypeForm}
-								>
-									Ok
-								</Button>
-							</Box>
-						) : (
-							<AssetTypeForm
-								onSubmit={handleSubmitPutAssetType}
-								submitButtonText="Update"
-								assetTypeToEdit={assetTypeToEdit!}
-							/>
-						)}
-					</Box>
-				</Box>
-			</Modal>
-			<Modal
-				open={openAddAssetForm}
-				onClose={handleCloseAddAssetForm}
-				aria-labelledby="modal-title"
-				aria-describedby="modal-description"
-			>
-				<Box
-					sx={{
-						position: 'absolute',
-						top: '40%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-						bgcolor: 'background.paper',
-						padding: '20px',
-						borderRadius: '15px',
-						minWidth: {
-							xs: 200,
-							sm: 300,
-						},
-					}}
-				>
-					<Typography
-						id="modal-title"
-						sx={{ textAlign: 'center' }}
-						variant="h5"
-					>
-						Add asset
-					</Typography>
-					<Box id="modal-description" sx={{ mt: 4 }}>
-						{postErrorAsset ? (
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									gap: '5px',
-								}}
-							>
-								<Alert severity="error">{postErrorAsset}</Alert>
-								<Button
-									variant="contained"
-									onClick={handleCloseAddAssetForm}
-								>
-									Ok
-								</Button>
-							</Box>
-						) : (
-							<AssetForm onSubmit={handleSubmitAsset} />
-						)}
-					</Box>
-				</Box>
-			</Modal>
-			<Modal
-				open={openConfirmDelete}
-				onClose={handleCloseConfirmDelete}
-				aria-labelledby="modal-title"
-				aria-describedby="modal-description"
-			>
-				<Box
-					sx={{
-						position: 'absolute',
-						top: '40%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-						bgcolor: 'background.paper',
-						padding: '20px',
-						borderRadius: '15px',
-						maxWidth: 400,
-					}}
-				>
-					<Typography
-						id="modal-title"
-						sx={{ textAlign: 'center' }}
-						variant="h5"
-					>
-						Are you sure?
-					</Typography>
-					<Box id="modal-description" sx={{ mt: 4 }}>
-						{deleteError ? (
-							<>
-								<Box sx={{ mb: 2 }}>
-									<Alert severity="error">
-										{deleteError}
-									</Alert>
-								</Box>
-								<Box
-									sx={{
-										display: 'flex',
-										flexDirection: 'row',
-										justifyContent: 'center',
-										gap: '5px',
-									}}
-								>
-									<Button
-										variant="contained"
-										onClick={handleCloseConfirmDelete}
-									>
-										Ok
-									</Button>
-								</Box>
-							</>
-						) : (
-							<>
+						{modalContent == 'addAssetType' ? (
+							postErrorAssetType ? (
 								<Box
 									sx={{
 										display: 'flex',
 										flexDirection: 'column',
-										minWidth: 300,
-										mb: 2,
-									}}
-								>
-									<Typography>
-										This action will delete asset type with
-										ID:
-									</Typography>
-									<Typography
-										variant="subtitle2"
-										sx={{ textAlign: 'center' }}
-									>
-										{assetTypeIdToDelete}
-									</Typography>
-								</Box>
-								<Box
-									sx={{
-										display: 'flex',
-										flexDirection: 'row',
-										justifyContent: 'center',
+										alignItems: 'center',
 										gap: '5px',
 									}}
 								>
+									<Alert severity="error">
+										{postErrorAssetType}
+									</Alert>
 									<Button
 										variant="contained"
-										onClick={handleDelete}
+										onClick={handleCloseModal}
 									>
-										Yes
-									</Button>
-									<Button
-										variant="outlined"
-										onClick={handleCloseConfirmDelete}
-									>
-										No
+										Ok
 									</Button>
 								</Box>
-							</>
-						)}
+							) : (
+								<AssetTypeForm
+									onSubmit={handleSubmitPostAssetType}
+									submitButtonText="Add"
+								/>
+							)
+						) : modalContent == 'editAssetType' ? (
+							putErrorAssetType ? (
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										alignItems: 'center',
+										gap: '5px',
+									}}
+								>
+									<Alert severity="error">
+										{putErrorAssetType}
+									</Alert>
+									<Button
+										variant="contained"
+										onClick={handleCloseModal}
+									>
+										Ok
+									</Button>
+								</Box>
+							) : (
+								<AssetTypeForm
+									onSubmit={handleSubmitPutAssetType}
+									submitButtonText="Update"
+									assetTypeToEdit={assetTypeToEdit!}
+								/>
+							)
+						) : modalContent == 'addAsset' ? (
+							postErrorAsset ? (
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										alignItems: 'center',
+										gap: '5px',
+									}}
+								>
+									<Alert severity="error">
+										{postErrorAsset}
+									</Alert>
+									<Button
+										variant="contained"
+										onClick={handleCloseModal}
+									>
+										Ok
+									</Button>
+								</Box>
+							) : (
+								<AssetForm onSubmit={handleSubmitAsset} />
+							)
+						) : modalContent == 'confirmDelete' ? (
+							deleteError ? (
+								<>
+									<Box sx={{ mb: 2 }}>
+										<Alert severity="error">
+											{deleteError}
+										</Alert>
+									</Box>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											gap: '5px',
+										}}
+									>
+										<Button
+											variant="contained"
+											onClick={handleCloseModal}
+										>
+											Ok
+										</Button>
+									</Box>
+								</>
+							) : (
+								<>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'column',
+											minWidth: 300,
+											mb: 2,
+										}}
+									>
+										<Typography>
+											This action will delete asset type
+											with ID:
+										</Typography>
+										<Typography
+											variant="subtitle2"
+											sx={{ textAlign: 'center' }}
+										>
+											{assetTypeIdToDelete}
+										</Typography>
+									</Box>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											gap: '5px',
+										}}
+									>
+										<Button
+											variant="contained"
+											onClick={handleDelete}
+										>
+											Yes
+										</Button>
+										<Button
+											variant="outlined"
+											onClick={handleCloseModal}
+										>
+											No
+										</Button>
+									</Box>
+								</>
+							)
+						) : modalContent == 'noAssetsForLabels' ? (
+							<>
+									<Box sx={{ mb: 2 }}>
+										<Alert severity="info">
+											{labelsError}
+										</Alert>
+									</Box>
+									<Box
+										sx={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											gap: '5px',
+										}}
+									>
+										<Button
+											variant="contained"
+											onClick={handleCloseModal}
+										>
+											Ok
+										</Button>
+									</Box>
+								</>
+						) : ''}
 					</Box>
 				</Box>
 			</Modal>
@@ -495,11 +447,12 @@ export default function AssetTypes() {
 				}}
 			>
 				<Typography variant="h5">Asset types:</Typography>
-				{labelsError && <Alert severity="info">{labelsError}</Alert>}
 				{auth?.user?.role == 'ADMIN' && (
 					<Button
 						variant="outlined"
-						onClick={handleOpenAddAssetTypeForm}
+						onClick={function () {
+							handleOpenModal('addAssetType')
+						}}
 					>
 						Add asset type
 					</Button>
@@ -575,7 +528,8 @@ export default function AssetTypes() {
 												variant="outlined"
 												fullWidth={true}
 												onClick={function () {
-													handleOpenAddAssetForm(
+													handleOpenModal(
+														'addAsset',
 														element
 													)
 												}}
@@ -622,7 +576,8 @@ export default function AssetTypes() {
 											variant="outlined"
 											fullWidth={true}
 											onClick={function () {
-												handleOpenEditAssetTypeForm(
+												handleOpenModal(
+													'editAssetType',
 													element
 												)
 											}}
@@ -634,7 +589,8 @@ export default function AssetTypes() {
 												variant="outlined"
 												fullWidth={true}
 												onClick={function () {
-													handleOpenConfirmDelete(
+													handleOpenModal(
+														'confirmDelete',
 														element
 													)
 												}}
