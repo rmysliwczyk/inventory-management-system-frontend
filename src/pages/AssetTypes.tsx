@@ -503,7 +503,7 @@ export default function AssetTypes() {
 												lg: 2,
 											}}
 											key={key}
-											sx={{ textAlign: 'center' }}
+											sx={{ textAlign: 'center', height: '80px' }}
 										>
 											<Typography>
 												{key.toUpperCase()}
