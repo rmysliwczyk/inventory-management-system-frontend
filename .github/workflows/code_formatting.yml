@@ -1,0 +1,17 @@
+name: Code Formatting
+
+on: [push, workflow_dispatch]
+
+jobs:
+  Code-Formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Prepare 'prettier'
+        run:  npm install -g prettier
+
+      - name: Run 'prettier'
+        run: prettier -w .
+
