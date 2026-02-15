@@ -472,7 +472,13 @@ export default function AssetTypes() {
 					</Box>
 				) : error ? (
 					<Alert severity="error">{error}</Alert>
-				) : assetTypes ? (
+				) : assetTypes ?
+					data.length == 0 ? (
+						<Typography>
+							👀 No asset types to see here. Add some with the "ADD ASSET TYPE" button above.
+						</Typography>
+				)
+					:(
 					assetTypes.map((element) => (
 						<Grid
 							container
