@@ -11,6 +11,8 @@ jobs:
 
       - name: Prepare 'prettier'
         run:  npm install -g prettier
+
+      - name: Prepare 'prettier-plugin-sort-imports'
         run:  npm install -g @trivago/prettier-plugin-sort-imports
 
       - name: Run 'prettier'
