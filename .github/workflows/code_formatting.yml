@@ -9,11 +9,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v5
 
-      - name: Prepare 'prettier'
-        run:  npm install -g prettier
-
-      - name: Prepare 'prettier-plugin-sort-imports'
-        run:  npm install -g @trivago/prettier-plugin-sort-imports
+      - name: Prepare 'prettier' and 'prettier-plugin-sort-imports'
+        run:  npm install -g prettier @trivago/prettier-plugin-sort-imports
 
       - name: Run 'prettier'
         run: prettier -w .
