@@ -259,7 +259,7 @@ export default function AssetTypes() {
 									: modalContent == 'confirmDelete'
 										? 'Are you sure?'
 										: modalContent == 'noAssetsForLabels' &&
-											"No labels to print"}
+											'No labels to print'}
 					</Typography>
 					<Box id="modal-description" sx={{ mt: 4 }}>
 						{modalContent == 'addAssetType' ? (
@@ -408,28 +408,28 @@ export default function AssetTypes() {
 							)
 						) : modalContent == 'noAssetsForLabels' ? (
 							<>
-									<Box sx={{ mb: 2 }}>
-										<Alert severity="info">
-											{labelsError}
-										</Alert>
-									</Box>
-									<Box
-										sx={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'center',
-											gap: '5px',
-										}}
+								<Box sx={{ mb: 2 }}>
+									<Alert severity="info">{labelsError}</Alert>
+								</Box>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'center',
+										gap: '5px',
+									}}
+								>
+									<Button
+										variant="contained"
+										onClick={handleCloseModal}
 									>
-										<Button
-											variant="contained"
-											onClick={handleCloseModal}
-										>
-											Ok
-										</Button>
-									</Box>
-								</>
-						) : ''}
+										Ok
+									</Button>
+								</Box>
+							</>
+						) : (
+							''
+						)}
 					</Box>
 				</Box>
 			</Modal>
@@ -472,143 +472,151 @@ export default function AssetTypes() {
 					</Box>
 				) : error ? (
 					<Alert severity="error">{error}</Alert>
-				) : assetTypes ?
+				) : assetTypes ? (
 					data.length == 0 ? (
 						<Typography>
-							👀 No asset types to see here. Add some with the "ADD ASSET TYPE" button above.
+							👀 No asset types to see here. Add some with the
+							"ADD ASSET TYPE" button above.
 						</Typography>
-				)
-					:(
-					assetTypes.map((element) => (
-						<Grid
-							container
-							component={Card}
-							key={element.id}
-							spacing={1}
-							sx={{
-								alignItems: 'left',
-								width: '100%',
-								padding: '10px',
-								mb: 1,
-							}}
-						>
-							{Object.entries(element).map(
-								([key, value]) =>
-									key !== 'assets' && (
-										<Grid
-											size={{
-												xs: 4,
-												sm: 4,
-												md: 4,
-												lg: 2,
-											}}
-											key={key}
-											sx={{ textAlign: 'center', height: '80px' }}
-										>
-											<Typography>
-												{key.toUpperCase()}
-											</Typography>
-											<Typography variant="body2">
-												{value}
-											</Typography>
-										</Grid>
-									)
-							)}
+					) : (
+						assetTypes.map((element) => (
 							<Grid
 								container
-								size={{ xs: 12, sm: 12, md: 12, lg: 6 }}
-								gap="5px"
+								component={Card}
+								key={element.id}
+								spacing={1}
+								sx={{
+									alignItems: 'left',
+									width: '100%',
+									padding: '10px',
+									mb: 1,
+								}}
 							>
-								<Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
-									<Box
-										sx={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'center',
-											gap: '5px',
-											height: '100%',
-										}}
+								{Object.entries(element).map(
+									([key, value]) =>
+										key !== 'assets' && (
+											<Grid
+												size={{
+													xs: 4,
+													sm: 4,
+													md: 4,
+													lg: 2,
+												}}
+												key={key}
+												sx={{
+													textAlign: 'center',
+													height: '80px',
+												}}
+											>
+												<Typography>
+													{key.toUpperCase()}
+												</Typography>
+												<Typography variant="body2">
+													{value}
+												</Typography>
+											</Grid>
+										)
+								)}
+								<Grid
+									container
+									size={{ xs: 12, sm: 12, md: 12, lg: 6 }}
+									gap="5px"
+								>
+									<Grid
+										size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
 									>
-										{auth?.user?.role == 'ADMIN' && (
+										<Box
+											sx={{
+												display: 'flex',
+												flexDirection: 'row',
+												justifyContent: 'center',
+												gap: '5px',
+												height: '100%',
+											}}
+										>
+											{auth?.user?.role == 'ADMIN' && (
+												<Button
+													variant="outlined"
+													fullWidth={true}
+													onClick={function () {
+														handleOpenModal(
+															'addAsset',
+															element
+														)
+													}}
+												>
+													Add asset
+												</Button>
+											)}
+											<Button
+												variant="outlined"
+												fullWidth={true}
+												onClick={function () {
+													navigate(
+														`/take-stock/${element.id}`
+													)
+												}}
+											>
+												Take stock
+											</Button>
+										</Box>
+									</Grid>
+									<Grid
+										size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+									>
+										<Box
+											sx={{
+												display: 'flex',
+												flexDirection: 'row',
+												justifyContent: 'center',
+												gap: '5px',
+												height: '100%',
+											}}
+										>
+											<Button
+												variant="outlined"
+												fullWidth={true}
+												onClick={function () {
+													printLabels(
+														element,
+														setLabelsError
+													)
+												}}
+											>
+												Print labels
+											</Button>
 											<Button
 												variant="outlined"
 												fullWidth={true}
 												onClick={function () {
 													handleOpenModal(
-														'addAsset',
+														'editAssetType',
 														element
 													)
 												}}
 											>
-												Add asset
+												Edit name
 											</Button>
-										)}
-										<Button
-											variant="outlined"
-											fullWidth={true}
-											onClick={function () {
-												navigate(
-													`/take-stock/${element.id}`
-												)
-											}}
-										>
-											Take stock
-										</Button>
-									</Box>
-								</Grid>
-								<Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
-									<Box
-										sx={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'center',
-											gap: '5px',
-											height: '100%',
-										}}
-									>
-										<Button
-											variant="outlined"
-											fullWidth={true}
-											onClick={function () {
-												printLabels(
-													element,
-													setLabelsError
-												)
-											}}
-										>
-											Print labels
-										</Button>
-										<Button
-											variant="outlined"
-											fullWidth={true}
-											onClick={function () {
-												handleOpenModal(
-													'editAssetType',
-													element
-												)
-											}}
-										>
-											Edit name
-										</Button>
-										{auth?.user?.role == 'ADMIN' && (
-											<Button
-												variant="outlined"
-												fullWidth={true}
-												onClick={function () {
-													handleOpenModal(
-														'confirmDelete',
-														element
-													)
-												}}
-											>
-												<DeleteIcon />
-											</Button>
-										)}
-									</Box>
+											{auth?.user?.role == 'ADMIN' && (
+												<Button
+													variant="outlined"
+													fullWidth={true}
+													onClick={function () {
+														handleOpenModal(
+															'confirmDelete',
+															element
+														)
+													}}
+												>
+													<DeleteIcon />
+												</Button>
+											)}
+										</Box>
+									</Grid>
 								</Grid>
 							</Grid>
-						</Grid>
-					))
+						))
+					)
 				) : (
 					''
 				)}

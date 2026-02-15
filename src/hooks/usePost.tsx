@@ -1,7 +1,7 @@
 import { AuthContext } from '../context/AuthContext'
 import { parseApiError } from '../utils/apiErrorParser'
 import customFetch from '../utils/customFetch'
-import { useState, useContext } from 'react'
+import { useContext, useState } from 'react'
 
 type PostState<T> = {
 	data: T | null
@@ -56,8 +56,8 @@ function usePost<T = unknown>() {
 		}
 	}
 
-	const reset = async() => {
-		setState({data: null, error: null, loading: false})
+	const reset = async () => {
+		setState({ data: null, error: null, loading: false })
 	}
 
 	return { post, reset, ...state }

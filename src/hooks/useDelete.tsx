@@ -1,7 +1,7 @@
 import { AuthContext } from '../context/AuthContext'
 import { parseApiError } from '../utils/apiErrorParser'
 import customFetch from '../utils/customFetch'
-import { useState, useContext } from 'react'
+import { useContext, useState } from 'react'
 
 type DeleteState = {
 	error: string | null
@@ -11,7 +11,7 @@ type DeleteState = {
 function useDelete() {
 	const [state, setState] = useState<DeleteState>({
 		error: null,
-		loading: false
+		loading: false,
 	})
 	const auth = useContext(AuthContext)
 

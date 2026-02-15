@@ -1,19 +1,19 @@
 import type { NewAssetDetails } from '../types'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
-import { useEffect, useState } from 'react'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Typography from '@mui/material/Typography'
-import Checkbox from '@mui/material/Checkbox'
 
 export default function AssetForm({
 	onSubmit,
@@ -33,7 +33,7 @@ export default function AssetForm({
 	})
 
 	useEffect(() => {
-		if (import.meta.env['VITE_DEBUG_ENABLED'] == "1") {
+		if (import.meta.env['VITE_DEBUG_ENABLED'] == '1') {
 			setUseDebug(true)
 		}
 	}, [])

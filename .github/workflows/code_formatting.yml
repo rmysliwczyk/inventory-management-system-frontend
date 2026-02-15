@@ -1,0 +1,27 @@
+name: Code Formatting
+
+on: [push, workflow_dispatch]
+
+jobs:
+    Code-Formatting:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v5
+              with:
+                  ref: ${{ github.head_ref }}
+                  token: ${{ secrets.WORKFLOW_TOKEN }}
+                  persist-credentials: true
+
+            - name: Prepare 'prettier'
+              run: npm install -g prettier
+
+            - name: Install npm dependencies
+              run: npm install --include=dev
+
+            - name: Run 'prettier'
+              run: prettier -w .
+
+            - name: Commit formatted code
+              uses: stefanzweifel/git-auto-commit-action@v7

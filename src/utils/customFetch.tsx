@@ -26,7 +26,7 @@ export default async function customFetch(
 		}
 	}
 
-	input = import.meta.env['VITE_API_URL'] + input;
+	input = import.meta.env['VITE_API_URL'] + input
 	const res = await fetch(input, init)
 	return res
 }

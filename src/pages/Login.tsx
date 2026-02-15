@@ -7,7 +7,7 @@ import Container from '@mui/material/Container'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import { useState, useEffect, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export default function Login() {
@@ -59,7 +59,7 @@ export default function Login() {
 					}}
 				>
 					<Box>
-						<Typography variant="h4" color='secondary'>
+						<Typography variant="h4" color="secondary">
 							Inventory Management System
 						</Typography>
 					</Box>

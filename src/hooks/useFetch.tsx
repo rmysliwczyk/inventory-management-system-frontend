@@ -1,7 +1,7 @@
 import { AuthContext } from '../context/AuthContext'
 import { parseApiError } from '../utils/apiErrorParser'
 import customFetch from '../utils/customFetch'
-import { useState, useEffect, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 type FetchState<T> = {
 	data: T | null
@@ -24,7 +24,7 @@ function useFetch<T = unknown>(url: string, options?: RequestInit) {
 	}
 
 	function reset() {
-		setState({ data: null, error: null, loading: false})
+		setState({ data: null, error: null, loading: false })
 	}
 
 	useEffect(() => {
@@ -72,7 +72,7 @@ function useFetch<T = unknown>(url: string, options?: RequestInit) {
 		}
 	}, [url, JSON.stringify(options), auth?.user, refetchIndex])
 
-	return { ...state, refetch, reset}
+	return { ...state, refetch, reset }
 }
 
 export default useFetch

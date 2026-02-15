@@ -1,7 +1,7 @@
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import Avatar from '@mui/material/Avatar'
 
 export default function Home() {
 	return (
@@ -25,9 +25,19 @@ export default function Home() {
 				</Typography>
 				<Box>
 					<h1>About me:</h1>
-					<Box sx={{display: "flex", gap: '10px', alignItems: "center"}}>
-					<Avatar sx={{width: 128, height: 128}} alt="Rafał Myśliwczyk" src="https://avatars.githubusercontent.com/u/31518644?v=4"/>
-					<h2>Hello. I'm Rafał 👋</h2>
+					<Box
+						sx={{
+							display: 'flex',
+							gap: '10px',
+							alignItems: 'center',
+						}}
+					>
+						<Avatar
+							sx={{ width: 128, height: 128 }}
+							alt="Rafał Myśliwczyk"
+							src="https://avatars.githubusercontent.com/u/31518644?v=4"
+						/>
+						<h2>Hello. I'm Rafał 👋</h2>
 					</Box>
 					<p>
 						🛠️ Fullstack Developer (Python + React + DevOps)
@@ -144,7 +154,6 @@ export default function Home() {
 							</a>
 						</li>
 					</ul>
-
 				</Box>
 			</Box>
 		</>

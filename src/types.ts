@@ -32,6 +32,6 @@ export interface AssetTypeDetails {
 	quantity: number
 }
 
-export interface NewAssetTypeDetails extends DebugOptions{
+export interface NewAssetTypeDetails extends DebugOptions {
 	name: string
 }
