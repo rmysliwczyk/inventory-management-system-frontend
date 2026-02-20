@@ -505,7 +505,7 @@ export default function AssetTypes() {
 												key={key}
 												sx={{
 													textAlign: 'center',
-													minHeight: '80px'
+													minHeight: '80px',
 												}}
 											>
 												<Typography variant="subtitle2">

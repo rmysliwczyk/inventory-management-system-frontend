@@ -15,13 +15,13 @@ function App() {
 		palette: {
 			mode: 'light',
 			primary: {
-				main: "#588157"
+				main: '#588157',
 			},
 			info: {
-				main: "#a3b18a"
+				main: '#a3b18a',
 			},
 			secondary: {
-				main: "#87bba2"
+				main: '#87bba2',
 			},
 			background: {
 				default: '#F2F0EF',
