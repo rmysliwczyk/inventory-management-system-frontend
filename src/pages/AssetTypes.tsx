@@ -439,8 +439,8 @@ export default function AssetTypes() {
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					gap: '15px',
-					padding: '20px',
+					gap: '10px',
+					padding: '10px',
 					overflow: 'auto',
 					width: '95%',
 					minHeight: '70vh',
@@ -505,10 +505,10 @@ export default function AssetTypes() {
 												key={key}
 												sx={{
 													textAlign: 'center',
-													height: '80px',
+													minHeight: '80px'
 												}}
 											>
-												<Typography>
+												<Typography variant="subtitle2">
 													{key.toUpperCase()}
 												</Typography>
 												<Typography variant="body2">
