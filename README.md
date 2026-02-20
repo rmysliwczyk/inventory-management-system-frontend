@@ -24,7 +24,7 @@ React Frontend for Inventory Management System. Check out the API [here](https:/
 - ⛶ [**@yudiel/react-qr-scanner**](https://github.com/yudielcurbelo/react-qr-scanner) for the Qr scanner
 - <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Jenkins-Light.svg" width=24/> **Jenkins** for CI/CD
 - <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Docker.svg" width=24/> **Docker** for CI/CD
-- <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/GithubActions-Light.svg" width=24/> **GitHub Actions** for CI/CD (🕐 Coming soon...)
+- <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/GithubActions-Light.svg" width=24/> **GitHub Actions** for automatic code formatting with prettier (CI/CD)
 
 ## 👉 Try it!
 
