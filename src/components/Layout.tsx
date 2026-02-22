@@ -14,6 +14,7 @@ import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useContext, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
+import Icon from '@mui/material/Icon'
 
 const pages = [
 	{ label: 'Check asset', path: '/check-asset' },
@@ -69,6 +70,20 @@ export default function Layout() {
 				<AppBar position="static">
 					<Container maxWidth="lg">
 						<Toolbar disableGutters>
+							<Icon sx={{
+								display: {xs: 'none', md: 'flex'},
+								width: "40px",
+								height: "40px",
+								mr: 2
+							}}>
+								<Box
+								component="img"
+								sx={{
+									width:"100%",
+									height: "100%"
+								}}
+								src="logo.svg"/>
+							</Icon>
 							<Typography
 								variant="h5"
 								noWrap
@@ -161,6 +176,20 @@ export default function Layout() {
 									</Button>
 								))}
 							</Box>
+							<Icon sx={{
+								display: {xs: 'flex', md: 'none'},
+								width: "40px",
+								height: "40px",
+								mr: 2
+							}}>
+								<Box
+								component="img"
+								sx={{
+									width:"100%",
+									height: "100%"
+								}}
+								src="logo.svg"/>
+							</Icon>
 							<Typography
 								variant="h6"
 								component="a"
@@ -176,6 +205,7 @@ export default function Layout() {
 									navigate('/')
 								}}
 							>
+
 								Inventory Management System
 							</Typography>
 							<Button
