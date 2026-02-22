@@ -5,6 +5,7 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -14,7 +15,6 @@ import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useContext, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
-import Icon from '@mui/material/Icon'
 
 const pages = [
 	{ label: 'Check asset', path: '/check-asset' },
@@ -70,19 +70,22 @@ export default function Layout() {
 				<AppBar position="static">
 					<Container maxWidth="lg">
 						<Toolbar disableGutters>
-							<Icon sx={{
-								display: {xs: 'none', md: 'flex'},
-								width: "40px",
-								height: "40px",
-								mr: 2
-							}}>
-								<Box
-								component="img"
+							<Icon
 								sx={{
-									width:"100%",
-									height: "100%"
+									display: { xs: 'none', md: 'flex' },
+									width: '40px',
+									height: '40px',
+									mr: 2,
 								}}
-								src="logo.svg"/>
+							>
+								<Box
+									component="img"
+									sx={{
+										width: '100%',
+										height: '100%',
+									}}
+									src="logo.svg"
+								/>
 							</Icon>
 							<Typography
 								variant="h5"
@@ -176,19 +179,22 @@ export default function Layout() {
 									</Button>
 								))}
 							</Box>
-							<Icon sx={{
-								display: {xs: 'flex', md: 'none'},
-								width: "40px",
-								height: "40px",
-								mr: 2
-							}}>
-								<Box
-								component="img"
+							<Icon
 								sx={{
-									width:"100%",
-									height: "100%"
+									display: { xs: 'flex', md: 'none' },
+									width: '40px',
+									height: '40px',
+									mr: 2,
 								}}
-								src="logo.svg"/>
+							>
+								<Box
+									component="img"
+									sx={{
+										width: '100%',
+										height: '100%',
+									}}
+									src="logo.svg"
+								/>
 							</Icon>
 							<Typography
 								variant="h6"
@@ -205,7 +211,6 @@ export default function Layout() {
 									navigate('/')
 								}}
 							>
-
 								Inventory Management System
 							</Typography>
 							<Button
