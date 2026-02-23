@@ -81,3 +81,10 @@ If you wish to run the automated functional tests with Selenium follow these ste
 - `cd /directory/with/the/sourcecode`
 - `npm install -D`
 - `npm test`
+
+## 📸 Screenshots
+<img src="screenshots/assettypepage.png" width=1024 alt="Asset Types page"/>  
+<img src="screenshots/labels.png" width=1024 alt="Labels for printing"/>  
+<p align="center">
+  <img src="screenshots/takingstock.jpg" width=512 alt="Taking stock"/>
+</p>
