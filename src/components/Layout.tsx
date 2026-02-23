@@ -185,7 +185,7 @@ export default function Layout() {
 								sx={{
 									display: { xs: 'flex', md: 'none' },
 									flexGrow: 1,
-									mr: 1
+									mr: 1,
 								}}
 							>
 								<Box
