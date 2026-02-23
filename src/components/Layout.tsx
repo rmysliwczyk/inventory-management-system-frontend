@@ -17,8 +17,8 @@ import { useContext, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 
 const pages = [
-	{ label: 'Check asset', path: '/check-asset' , id: 'check-asset'},
-	{ label: 'Asset types', path: '/asset-types', id: 'asset-types'},
+	{ label: 'Check asset', path: '/check-asset', id: 'check-asset' },
+	{ label: 'Asset types', path: '/asset-types', id: 'asset-types' },
 ]
 
 export default function Layout() {

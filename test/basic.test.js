@@ -32,26 +32,35 @@ describe('Basic functionality', function () {
 	})
 
 	it('User can navigate to Asset Type page', async function () {
-		let assetTypePageButton = await driver.findElement(By.id('asset-types-button'))
+		let assetTypePageButton = await driver.findElement(
+			By.id('asset-types-button')
+		)
 		await assetTypePageButton.click()
-		let addAssetTypeButton = await driver.findElement(By.name('add-asset-type-button'))
+		let addAssetTypeButton = await driver.findElement(
+			By.name('add-asset-type-button')
+		)
 		assert.notEqual(addAssetTypeButton, undefined)
 	})
 
 	it('User can add new Asset Type', async function () {
 		let expectedAssetTypeName = 'AutomatedTestingAssetType'
-		let addAssetTypeButton = await driver.findElement(By.name('add-asset-type-button'))
+		let addAssetTypeButton = await driver.findElement(
+			By.name('add-asset-type-button')
+		)
 		await addAssetTypeButton.click()
 		let assetNameTextField = await driver.findElement(By.name('name'))
 		await assetNameTextField.sendKeys(expectedAssetTypeName)
-		let submitButton = await driver.findElement(By.name('asset-type-form-submit-button'))
+		let submitButton = await driver.findElement(
+			By.name('asset-type-form-submit-button')
+		)
 		await submitButton.click()
-		let assetTypeCard = await driver.findElement(By.css(`[id^=${expectedAssetTypeName}]`))
+		let assetTypeCard = await driver.findElement(
+			By.css(`[id^=${expectedAssetTypeName}]`)
+		)
 		let pTag = await assetTypeCard.findElement(By.css('p'))
 		let assetTypeName = await pTag.getText()
 		assert(expectedAssetTypeName, assetTypeName)
 	})
-
 
 	after(async () => await driver.quit())
 })
