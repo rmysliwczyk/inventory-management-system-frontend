@@ -8,11 +8,11 @@ describe('Basic functionality', function () {
 		await driver.manage().setTimeouts({ implicit: 5000 })
 	})
 
-	it('Title is as expected', async function() {
-		await driver.get('http://127.0.0.1:8000/login');
-		let title = await driver.getTitle();
-		assert.equal("Inventory Management System", title);
-		});
+	it('Title is as expected', async function () {
+		await driver.get('http://127.0.0.1:8000/login')
+		let title = await driver.getTitle()
+		assert.equal('Inventory Management System', title)
+	})
 
 	it('User can log in', async function () {
 		let usernameTextBox = await driver.findElement(By.name('username'))
