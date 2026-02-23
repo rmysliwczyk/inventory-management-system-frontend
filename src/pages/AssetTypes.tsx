@@ -510,13 +510,13 @@ export default function AssetTypes() {
 													minHeight: '80px',
 												}}
 											>
-												<Typography 
-												variant="subtitle2">
+												<Typography variant="subtitle2">
 													{key.toUpperCase()}
 												</Typography>
-												<Typography 
-												id={`${element.name}-name-tag-${element.id}`}
-												variant="body2">
+												<Typography
+													id={`${element.name}-name-tag-${element.id}`}
+													variant="body2"
+												>
 													{value}
 												</Typography>
 											</Grid>
