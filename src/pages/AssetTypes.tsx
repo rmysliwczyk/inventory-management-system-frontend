@@ -393,6 +393,7 @@ export default function AssetTypes() {
 									>
 										<Button
 											variant="contained"
+											id="confirm-delete-button"
 											onClick={handleDelete}
 										>
 											Yes
@@ -607,6 +608,7 @@ export default function AssetTypes() {
 												<Button
 													variant="outlined"
 													fullWidth={true}
+													id={`${element.name}-delete-button-${element.id}`}
 													onClick={function () {
 														handleOpenModal(
 															'confirmDelete',
