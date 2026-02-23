@@ -184,9 +184,8 @@ export default function Layout() {
 							<Icon
 								sx={{
 									display: { xs: 'flex', md: 'none' },
-									width: '40px',
-									height: '40px',
-									mr: 2,
+									flexGrow: 1,
+									mr: 1
 								}}
 							>
 								<Box
@@ -199,7 +198,7 @@ export default function Layout() {
 								/>
 							</Icon>
 							<Typography
-								variant="h6"
+								variant="subtitle2"
 								component="a"
 								sx={{
 									display: { xs: 'flex', md: 'none' },
