@@ -73,6 +73,7 @@ No AI was used for the code of documentation of this project. I'm not opposed to
 - 🌐 **HTTPS** with certbot and Let's Encrypt
 
 ## 🧪 Running tests
+
 If you wish to run the automated functional tests with Selenium follow these steps:
 
 - Running tests requires [Bash](https://www.gnu.org/software/bash/) and [NodeJS](https://nodejs.org/en)
