@@ -94,13 +94,20 @@ describe('Basic functionality', function () {
 
 	it('Admin can delete the Asset Type', async function () {
 		let assetTypeName = `NewTestAssetType-${timestamp}`
-		let assetTypeCard = await driver.findElement(By.css(`[id^=${assetTypeName}]`))
-		let deleteAssetTypeButton = await assetTypeCard.findElement(By.css(`[id^=${assetTypeName}-delete-button]`))
+		let assetTypeCard = await driver.findElement(
+			By.css(`[id^=${assetTypeName}]`)
+		)
+		let deleteAssetTypeButton = await assetTypeCard.findElement(
+			By.css(`[id^=${assetTypeName}-delete-button]`)
+		)
 		await deleteAssetTypeButton.click()
-		let submitButton = await driver.findElement(By.id('confirm-delete-button'))
+		let submitButton = await driver.findElement(
+			By.id('confirm-delete-button')
+		)
 		await submitButton.click()
 		await driver.sleep(3000)
-		let elementExists = driver.findElements(By.css(`[id^=${assetTypeName}]`)).length == 0
+		let elementExists =
+			driver.findElements(By.css(`[id^=${assetTypeName}]`)).length == 0
 		assert.equal(elementExists, false)
 	})
 
