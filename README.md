@@ -10,6 +10,7 @@ React Frontend for Inventory Management System. Check out the API [here](https:/
 - 🌙 Dark mode with system preference awareness
 - 🛂 Authorization with Admin and User actions separation
 - 📱Responsive design for mobile and desktop
+- 🧪 Automated functional testing with Selenium
 - 🔐 Session management with Secure JWT Tokens
 - ✨ Clean and simple
 
@@ -25,6 +26,8 @@ React Frontend for Inventory Management System. Check out the API [here](https:/
 - <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Jenkins-Light.svg" width=24/> **Jenkins** for CI/CD
 - <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Docker.svg" width=24/> **Docker** for CI/CD
 - <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/GithubActions-Light.svg" width=24/> **GitHub Actions** for automatic code formatting with prettier (CI/CD)
+- <img src="https://github.com/tandpfun/skill-icons/blob/main/icons/Selenium.svg" width=24/> **Selenium** for automated functional testing
+- <img src="https://github.com/mochajs/mocha/blob/main/docs-next/src/components/mocha-logo.svg" width=24/> **MochaJS** as test runner for Selenium
 
 ## 👉 Try it!
 
@@ -68,3 +71,12 @@ No AI was used for the code of documentation of this project. I'm not opposed to
 - <img src="https://github.com/LelouchFR/skill-icons/blob/main/assets/nginx.svg" width=24/> **NGINX** for reverse proxy
 - <img src="https://raw.githubusercontent.com/LelouchFR/skill-icons/refs/heads/main/assets/github-auto.svg" width=24/> **GitHub webhook** for triggering Jenkins build and deployment
 - 🌐 **HTTPS** with certbot and Let's Encrypt
+
+## 🧪 Running tests
+If you wish to run the automated functional tests with Selenium follow these steps:
+
+- Running tests requires [Bash](https://www.gnu.org/software/bash/) and [NodeJS](https://nodejs.org/en)
+- `git clone` the repository or download and extract the .zip with the source code.
+- `cd /directory/with/the/sourcecode`
+- `npm install -D`
+- `npm test`
