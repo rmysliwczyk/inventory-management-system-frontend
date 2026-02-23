@@ -60,6 +60,7 @@ export default function AssetTypeForm({
 						<Button
 							type="submit"
 							variant="outlined"
+							name="asset-type-form-submit-button"
 							loading={false}
 						>
 							{submitButtonText}

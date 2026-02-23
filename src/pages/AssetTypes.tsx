@@ -450,6 +450,7 @@ export default function AssetTypes() {
 				{auth?.user?.role == 'ADMIN' && (
 					<Button
 						variant="outlined"
+						name="add-asset-type-button"
 						onClick={function () {
 							handleOpenModal('addAssetType')
 						}}
@@ -483,6 +484,7 @@ export default function AssetTypes() {
 							<Grid
 								container
 								component={Card}
+								id={`${element.name}-card-${element.id}`}
 								key={element.id}
 								spacing={1}
 								sx={{

@@ -17,8 +17,8 @@ import { useContext, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 
 const pages = [
-	{ label: 'Check asset', path: '/check-asset' },
-	{ label: 'Asset types', path: '/asset-types' },
+	{ label: 'Check asset', path: '/check-asset' , id: 'check-asset'},
+	{ label: 'Asset types', path: '/asset-types', id: 'asset-types'},
 ]
 
 export default function Layout() {
@@ -142,6 +142,7 @@ export default function Layout() {
 									{pages.map((page) => (
 										<MenuItem
 											key={page.label}
+											id={`${page.id}-menuitem`}
 											onClick={function () {
 												handleCloseNavMenu()
 												navigate(page.path)
@@ -165,6 +166,7 @@ export default function Layout() {
 								{pages.map((page) => (
 									<Button
 										key={page.label}
+										id={`${page.id}-button`}
 										onClick={function () {
 											handleCloseNavMenu()
 											navigate(page.path)
