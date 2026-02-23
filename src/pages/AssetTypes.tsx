@@ -450,7 +450,7 @@ export default function AssetTypes() {
 				{auth?.user?.role == 'ADMIN' && (
 					<Button
 						variant="outlined"
-						name="add-asset-type-button"
+						id="add-asset-type-button"
 						onClick={function () {
 							handleOpenModal('addAssetType')
 						}}
@@ -510,10 +510,13 @@ export default function AssetTypes() {
 													minHeight: '80px',
 												}}
 											>
-												<Typography variant="subtitle2">
+												<Typography 
+												variant="subtitle2">
 													{key.toUpperCase()}
 												</Typography>
-												<Typography variant="body2">
+												<Typography 
+												id={`${element.name}-name-tag-${element.id}`}
+												variant="body2">
 													{value}
 												</Typography>
 											</Grid>
@@ -590,6 +593,7 @@ export default function AssetTypes() {
 											<Button
 												variant="outlined"
 												fullWidth={true}
+												id={`${element.name}-edit-button-${element.id}`}
 												onClick={function () {
 													handleOpenModal(
 														'editAssetType',
