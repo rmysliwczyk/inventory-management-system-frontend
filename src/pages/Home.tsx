@@ -37,7 +37,7 @@ export default function Home() {
 							alt="Rafał Myśliwczyk"
 							src="https://avatars.githubusercontent.com/u/31518644?v=4"
 						/>
-						<h2>Hello. I'm Rafał 👋</h2>
+						<h2>Hello. I'm Rafał 👋 Talk to my personal <a href="http://assistant.mysliwczykrafal.pl">AI Assistant</a></h2>
 					</Box>
 					<p>
 						🛠️ Fullstack Developer (Python + React + DevOps)
