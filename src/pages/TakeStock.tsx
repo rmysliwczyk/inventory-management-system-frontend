@@ -72,9 +72,13 @@ export default function TakeStock() {
 			})
 			setOpenModal(true)
 		} else {
-			setQrCodeError(
-				"Qr code not recognized. It's not the Qr code of this asset type."
-			)
+			if (scannedAssets.find((asset) => asset.id == result[0].rawValue)) {
+				setQrCodeError('This asset was already scanned.')
+			} else {
+				setQrCodeError(
+					`This Qr code does not belong to an asset of type ${assetTypeDetails?.name}.`
+				)
+			}
 			setOpenModal(true)
 		}
 	}
@@ -128,10 +132,7 @@ export default function TakeStock() {
 						}}
 					>
 						{qrCodeError ? (
-							<Alert severity="error">
-								The scanned Qr code does not belong to an asset
-								of this asset type
-							</Alert>
+							<Alert severity="error">{qrCodeError}</Alert>
 						) : (
 							lastScannedAsset &&
 							Object.entries(lastScannedAsset).map(
