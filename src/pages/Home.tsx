@@ -63,7 +63,7 @@ export default function Home() {
 							width="16/"
 						/>
 						<strong>
-							<a href="https://www.linkedin.com/in/rafal-mysliwczyk-307b31120">
+							<a href="https://www.linkedin.com/in/rafal-mysliwczyk">
 								LinkedIn
 							</a>
 						</strong>
