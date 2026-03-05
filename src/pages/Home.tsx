@@ -129,6 +129,11 @@ export default function Home() {
 							</a>
 						</li>
 						<li>
+							<a href="https://github.com/rmysliwczyk/ai-assistant">
+								AI Assistant
+							</a>
+						</li>
+						<li>
 							<a href="https://github.com/rmysliwczyk/calorie-tracker-frontend">
 								Calorie Tracker - Frontend
 							</a>
